@@ -28,12 +28,17 @@ def load_arguments():
                                                                          "information about your own photovoltaic "
                                                                          "power plant")
 
-    parser.add_argument("-d", "--debug",  type=bool, default=False, help="Debug the running application")
+    parser.add_argument("-d", "--debug", type=bool, default=False, help="Debug the running application")
     parser.add_argument('-auth-type', '--auth-type', type=str, default=None, help="Authentication type on the API "
-                                                                                    "service")
+                                                                                  "service")
     parser.add_argument("-u", "--username", type=str, default=None, help="Growatt username account")
     parser.add_argument("-p", "--password", type=str, default=None, help="Growatt password account")
     parser.add_argument("-key", "--api-key-token", type=str, default=None, help="Growatt API KEY TOKEN")
+    parser.add_argument("-plantId", "--plant-id", type=int, default=None, help="ID of the plant that you want to get "
+                                                                               "the information")
+    parser.add_argument("-userId", "--user-id", type=int, default=None, help="ID of the logged user")
+    parser.add_argument("-inverterId", "--inverter-id", type=list, nargs="+", help="List of you Growatt inverters, "
+                                                                                   "delimited by space")
     parser.add_argument('--version', action='version', version='%(prog)s 1.0')
 
     return parser.parse_args()
