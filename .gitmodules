@@ -1,0 +1,3 @@
+[submodule "PyPi_GrowattServer"]
+	path = PyPi_GrowattServer
+	url = https://github.com/indykoning/PyPi_GrowattServer
