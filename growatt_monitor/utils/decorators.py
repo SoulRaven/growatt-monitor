@@ -1,6 +1,6 @@
 #  -*- coding: utf-8 -*-
 #
-#              Copyright (C) 2018-2021 ProGeek
+#  Copyright (C) 2020-2022 ProGeek
 #
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -23,24 +23,3 @@ from growatt_monitor.conf import settings
 log = logging.getLogger('growatt_logging')
 
 
-def session_manager(f):
-
-    @functools.wraps(f)
-    def wrapper(*args, **kwargs):
-        self = args[0]
-        if self.auth_type == 'api_key':
-            pass
-        elif self.auth_type == 'auth':
-            if not self.logged_in:
-                self.login()
-
-        if self.logged_in:
-            output = f(*args, **kwargs)
-
-        if self.auth_type == 'auth':
-            if self.logged_in:
-                self.logout()
-
-        return output
-
-    return wrapper

@@ -1,6 +1,6 @@
 #  -*- coding: utf-8 -*-
 #
-#              Copyright (C) 2018-<copyright_year> ProGeek
+#  Copyright (C) 2020-2022 ProGeek
 #
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -42,12 +42,3 @@ def make_hashable(value):
     return value
 
 
-def hash_password(password):
-    """
-    Normal MD5, except add c if a byte of the digest is less than 10.
-    """
-    password_md5 = hashlib.md5(password.encode("utf-8")).hexdigest()
-    for i in range(0, len(password_md5), 2):
-        if password_md5[i] == "0":
-            password_md5 = password_md5[0:i] + "c" + password_md5[i + 1 :]
-    return password_md5
