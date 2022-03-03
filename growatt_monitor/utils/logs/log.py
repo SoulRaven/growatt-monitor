@@ -15,10 +15,13 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
-from pathlib import Path
 import logging
 import logging.config
+import os
+import sys
+from threading import RLock
+
+from loguru import logger
 
 from growatt_monitor.conf import settings
 from growatt_monitor.utils.utils import import_string
@@ -28,15 +31,15 @@ DEFAULT_LOGGING = {
     'disable_existing_loggers': False,
     'filters': {
         'require_debug_false': {
-            '()': 'growatt_monitor.utils.log.RequireDebugFalse',
+            '()': 'growatt_monitor.utils.logs.log.RequireDebugFalse',
         },
         'require_debug_true': {
-            '()': 'growatt_monitor.utils.log.RequireDebugTrue',
-        }
+            '()': 'growatt_monitor.utils.logs.log.RequireDebugTrue',
+        },
     },
     'formatters': {
         'growatt_monitor.server': {
-            '()': 'growatt_monitor.utils.log.ServerFormatter',
+            '()': 'growatt_monitor.utils.logs.log.ServerFormatter',
             'format': '[{server_time}] {message}',
             'style': '{',
         },
@@ -57,16 +60,17 @@ DEFAULT_LOGGING = {
             'backupCount': 3,
             'filename': 'log/debug.log',
             'formatter': 'verbose',
-            'filters': ['require_debug_true']
+            'filters': ['require_debug_true'],
         },
-        'console': {
-            'level': 'INFO',
-            'class': 'logging.StreamHandler',
-            'formatter': 'simple'
-        },
+        'console': {'level': 'INFO', 'class': 'logging.StreamHandler', 'formatter': 'simple'},
     },
     'loggers': {
         'growatt_logging': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'dispatch': {
             'handlers': ['console', 'file'],
             'level': 'INFO',
             'propagate': False,
@@ -75,14 +79,13 @@ DEFAULT_LOGGING = {
             'handlers': ['file'],
             'level': 'DEBUG',
             'propagate': False,
-
         },
         'schedule': {
             'handlers': ['console', 'file'],
             'level': 'DEBUG',
             'propagate': False,
-        }
-    }
+        },
+    },
 }
 
 
@@ -99,13 +102,11 @@ def configure_logging(logging_config, logging_settings):
 
 
 class RequireDebugFalse(logging.Filter):
-
     def filter(self, records):
         return not settings.DEBUG
 
 
 class RequireDebugTrue(logging.Filter):
-
     def filter(self, record):
         return settings.DEBUG
 
@@ -117,7 +118,6 @@ class ServerFormatter(logging.Formatter):
         super().__init__(*args, **kwargs)
 
     def format(self, record):
-
         if self.uses_server_time() and not hasattr(record, 'server_time'):
             record.server_time = self.formatTime(record, self.datefmt)
 

@@ -15,11 +15,28 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import logging
 import functools
+from loguru import logger
 
 from growatt_monitor.conf import settings
 
-log = logging.getLogger('growatt_logging')
+
+def logger_wraps(*args, **kwargs):
+    def wrapper(func):
+        name = func.__name__
+
+        @functools.wraps(func)
+        def wrapped(*_args, **_kwargs):
+            logger_ = logger.opt(depth=1)
+            if settings.DEBUG:
+                logger_.debug("Entering '{}' (args={}, kwargs={})", name, _args, _kwargs)
+            result = func(*_args, **_kwargs)
+            if settings.DEBUG:
+                logger_.debug("Exiting '{}' (result={})", name, result)
+            return result
+
+        return wrapped
+
+    return wrapper
 
 

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #  -*- coding: utf-8 -*-
 #
 #  Copyright (C) 2020-2022 ProGeek
@@ -16,19 +16,19 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import os
+
+import logging
 import sys
 
-from loguru import logger
-
+from growatt_monitor import setup
 from growatt_monitor.conf import settings
-
+from loguru import logger
 
 if __name__ == '__main__':
     logger.info("Start the Growatt Monitor script")
 
     try:
-        pass
+        setup()
     except KeyboardInterrupt:
         logger.warning("Growatt Monitor script interrupted")
-        sys.exit(1)
+        sys.exit(0)

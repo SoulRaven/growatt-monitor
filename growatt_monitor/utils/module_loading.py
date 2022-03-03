@@ -64,7 +64,7 @@ def autodiscover_modules(*args, **kwargs):
     registry. This register_to object must have a _registry instance variable
     to access it.
     """
-    from growatt_monitor.apps import apps
+    from django.apps import apps
 
     register_to = kwargs.get('register_to')
     for app_config in apps.get_app_configs():

@@ -22,6 +22,11 @@ from growatt_monitor.utils.hashable import make_hashable
 NON_FIELD_ERRORS = '__all__'
 
 
+class AppRegistryNotReady(Exception):
+    """The growatt_monitor.apps registry is not populated yet"""
+    pass
+
+
 class ConfigFileException(Exception):
     pass
 
@@ -132,6 +137,18 @@ class ValidationError(Exception):
 
 class WrongPyVersion(Exception):
     pass
+
+
+class MissingInstalledPackage(Exception):
+
+    def __init__(self, packages):
+        self.packages = packages
+        self.message = "The following packages are not installed from requirements.txt: "
+
+        super().__init__(self.message)
+
+    def __str__(self):
+        return f"{self.message} {self.packages}"
 
 
 class GrowattApiError(RuntimeError):
