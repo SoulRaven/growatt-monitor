@@ -18,29 +18,17 @@
 
 import os
 import sys
-import time
-import logging
 
-from datetime import datetime
+from loguru import logger
 
 from growatt_monitor.conf import settings
-from growatt_monitor.utils.log import configure_logging
-from growatt_monitor.utils.utils import load_arguments
-
-from growattServer import Timespan
-
-from growatt_monitor.core.GrowattWeb import GrowattWeb
-
-log = logging.getLogger('growatt_logging')
 
 
 if __name__ == '__main__':
-    log.info("Start the Growatt Monitor script")
-    args = load_arguments()
+    logger.info("Start the Growatt Monitor script")
+
     try:
-        with GrowattWeb(**vars(args)) as api:
-            data = api.login()
-            plant_info = api.mix_info()
+        pass
     except KeyboardInterrupt:
-        log.warning("Growatt Monitor script interrupted")
+        logger.warning("Growatt Monitor script interrupted")
         sys.exit(1)

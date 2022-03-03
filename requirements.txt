@@ -1,3 +1,7 @@
-requests>=2.26.0
-setuptools>=60.5.0
+requests>=2.27.1
+setuptools>=60.9.3
 growattServer>=1.2.0
+loguru>=0.6.0
+yagmail>=0.15.277
+schedule>=1.1.0
+pyowm>=3.3.0
