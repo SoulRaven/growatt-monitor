@@ -1,0 +1,1045 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/ProGeek/Growatt_Web_API/1.0.0
+  - description: Growatt API WEB server
+    url: https://server-api.growatt.com
+info:
+  version: "1.0.0"
+  title: Growatt Web API
+  description: |-
+    This is a reverse engineering of the Growatt API from iOS application.
+
+    _Reverse date 03.02.2022 application version is: 5.82_
+  contact:
+    name: Zaharia Constantin
+    email: constantin.zaharia@progeek.ro
+  license:
+    url: https://choosealicense.com/licenses/gpl-3.0/
+    name: GPLv3
+paths:
+  /newTwoLoginAPI.do:
+    post:
+      tags:
+        - Login
+      operationId: Login
+      summary: Login form for login the user on Growatt OSS
+      description: On success login the server will reply with a specific JSON schema with user account information
+      responses:
+        '200':
+          description: successfully on login operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LoginWebForm'
+    get:
+      tags:
+        - Login
+      operationId: Messagers
+      summary: After the login check if any message from the backend
+      description: Messages from the backend server
+      parameters:
+        - in: query
+          name: op
+          required: true
+          schema:
+            type: string
+            default: getServerMessage
+        - in: query
+          name: accountName
+          required: true
+          schema:
+            type: string
+            default: 
+      responses:
+        '200':
+          description: On success return an object with spcific backend notifications or messages
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/anyValue'
+  /newTwoPlantAPI.do:
+    post:
+      tags:
+        - PlantDetails
+      operationId: getUserCentralEntryDataByPlantId
+      summary: Return an object with plant details
+      description: ''
+      responses:
+        '200':
+          description: 'Get the plant information using the plantId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getUserCentralEntryDataByPlantId'
+    get:
+      tags:
+        - PlantDetails
+      operationId: getAllDeviceList
+      parameters:
+        - in: query
+          name: op
+          required: true
+          schema:
+            type: string
+            default: getAllDeviceList
+      responses:
+        '200':
+          description: ''
+          content:
+            aplication/json:
+              schema:
+                $ref: '#/components/schemas/getallDeviceListResponse'
+  /newStorageAPI.do:
+    post:
+      tags:
+        - StorageAPI
+      operationId: getSystemStatusData
+      summary: ''
+      description: ''
+      parameters:
+        - in: query
+          name: op
+          required: true
+          schema:
+            type: string
+            enum: [
+              getSystemStatusData_sacolar,
+              getEnergyOverviewData_sacolar,
+              getEnergyProdAndConsData_sacolar
+            ]
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/getSystemStatusData_sacolarResponse'
+                  - $ref: '#/components/schemas/getEnergyOverviewData_sacolarResponse'
+                  - $ref: '#/components/schemas/getEnergyProdAndConsData_sacolarResponse'
+components:
+  securitySchemes:
+    ApiKeyAuth:         # arbitrary name for the security scheme; will be used in the "security" key later
+      type: apiKey
+      in: cookie
+      name: JSESSIONID # cookie name
+  schemas:
+    anyValue:
+      description: The uri can return any schema, not well documented
+      anyOf:
+        - type: string
+        - type: array
+          items: {}
+        - type: object
+    getEnergyProdAndConsData_sacolarResponse:
+      description: chart object contains a 15 minutes intervals object schema with within a 24hours interval
+      type: object
+      properties:
+        result:
+          type: number
+          example: 1
+        obj:
+          type: object
+          properties:
+            eChargeTotal:
+              type: string
+              example: 1.2
+            chartData:
+              type: object
+              properties:
+                00:00:
+                  type: object
+                  properties:
+                    pacToUser:
+                      type: number
+                      example: 6
+                    sysOut:
+                      type: number
+                      example: 0
+                    userLoad:
+                      type: number
+                      example: 0
+                    ppv:
+                      type: number
+                      example: 551.2000122070312
+            eDisCharge:
+              type: string
+              example: 0.1
+            eCharge:
+              type: string
+              example: 1.2
+            eAcCharge:
+              type: string
+              example: 0
+            eDisChargeTotal:
+              type: string
+              example: 0.1
+            eAcDisCharge:
+              type: string
+              example: 0
+        msg:
+          type: string
+          example: 200
+    getEnergyOverviewData_sacolarResponse:
+      type: object
+      properties:
+        result:
+          type: number
+          example: 1
+        obj:
+          type: object
+          properties:
+            eChargeTotal:
+              type: string
+              example: 51.6
+            useEnergyTotal:
+              type: string
+              example: 0.8
+            eToUserToday:
+              type: string
+              example: 0
+            eDischargeToday:
+              type: string
+              example: 0.1
+            eDischargeTotal:
+              type: string
+              example: 0.7
+            eChargeToday:
+              type: string
+              example: 1.2
+            useEnergyToday:
+              type: string
+              example: 0
+            eToUserTotal:
+              type: string
+              example: 1.2
+            epvTotal:
+              type: string
+              example: 50.4
+            epvToday:
+              type: string
+              example: 1.2
+        msg:
+          type: string
+          example: 200
+    getSystemStatusData_sacolarResponse:
+      type: object
+      properties:
+        result:
+          type: number
+          example: 1
+        obj:
+          type: object
+          properties:
+            fAcInput:
+              type: string
+              example: 50
+            status:
+              type: string
+              example: 5
+            statusText:
+              type: string
+              example: PV charge
+            vAcInput:
+              type: string
+              example: 241
+            gridPower:
+              type: string
+              example: 0
+            batPower:
+              type: string
+              example: 0
+            iPv2:
+              type: string
+              example: 0
+            iPv1:
+              type: string
+              example: 0
+            vBat:
+              type: string
+              example: 49.7
+            activePower:
+              type: string
+              example: 0
+            loadPrecent:
+              type: string
+              example: 0
+            iTotal:
+              type: string
+              example: 0
+            deviceType:
+              type: string
+              example: 3
+            panelPower:
+              type: string
+              example: 1
+            apparentPower:
+              type: string
+              example: 0
+            capacity:
+              type: string
+              example: 99
+            vAcOutput:
+              type: string
+              example: 0
+            invStatus:
+              type: string
+              example: -10
+            loadPower:
+              type: string
+              example: 0
+            ppv2:
+              type: string
+              example: 0
+            ppv1:
+              type: string
+              example: 1
+            vPv2:
+              type: string
+              example: 0
+            fAcOutput:
+              type: string
+              example: 0
+            vPv1:
+              type: string
+              example: 356.4
+        msg:
+          type: string
+          example: 200
+    getallDeviceListResponse:
+      type: object
+      properties:
+        plantMoneyText:
+          type: string
+          example: 0.00/$
+        optimizerType:
+          type: number
+          example: 0
+        ammeterType:
+          type: string
+          example: 0
+        storagePgrid:
+          type: string
+          example: 0
+        todayEnergy:
+          type: string
+          example: 4.7
+        storageTodayPpv:
+          type: string
+          example: 584
+        invTodayPpv:
+          type: string
+          example: 0
+        totalEnergy:
+          type: string
+          example: 164.6
+        nominalPower:
+          type: number
+          example: 0
+        todayDischarge:
+          type: string
+          example: 0
+        Co2Reduction:
+          type: string
+          example: 0
+        isHaveOptimizer:
+          type: number
+          example: 0
+        storagePuser:
+          type: string
+          example: 584
+        useEnergy:
+          type: string
+          example: 0
+        totalMoneyText:
+          type: string
+          example: 0
+        nominal_Power:
+          type: number
+          example: 5600
+        deviceList:
+          type: array
+          items:
+            type: object
+            properties:
+              lost:
+                type: boolean
+              location:
+                type: string
+                example:
+              datalogSn:
+                type: string
+                example: DDD0BHP04P
+              deviceSn:
+                type: string
+                example: RKG5BEL098
+              deviceStatus:
+                type: string
+                example: 5
+              pCharge:
+                type: string
+                example: 0
+              activePower:
+                type: string
+                example: 0
+              deviceAilas:
+                type: string
+                example: RKG5BEL098
+              deviceType:
+                type: string
+                example: storage
+              storageType:
+                type: string
+                example: 3
+              eChargeToday:
+                type: string
+                example: 0
+              apparentPower:
+                type: string
+                example: 5000
+              capacity:
+                type: string
+                example: 99 %
+              energy:
+                type: string
+                example: 50.4
+        isHavePumper:
+          type: string
+          example: 0
+    getUserCentralEntryDataByPlantId:
+      type: object
+      properties:
+        weatherMap:
+          type: object
+          properties:
+            msg:
+              type: string
+              example:
+            success:
+              type: boolean
+        plantNumber:
+          type: number
+          example: 1
+        treeValue:
+          type: string
+          example: 9.1
+        treeStr:
+          type: string
+          example: 9
+        nominalPowerStr:
+          type: string
+          example: 5.6kWp
+        eventMessBeanList:
+          type: array
+          items: {}
+        yearValue:
+          type: string
+          example: 0.0
+        formulaCo2Vlue:
+          type: string
+          example: 164.1
+        formulaCo2Str:
+          type: string
+          example: 164.1kg
+        todayValue:
+          type: string
+          example: 4.7
+        optimezerMap:
+          type: object
+          properties:
+            isHaveOptimezer:
+              type: number
+              example: 0
+        totalStr:
+          type: string
+          example: 164.6kWh
+        powerValue:
+          type: string
+          example: 584.0
+        totalValue:
+          type: string
+          example: 164.6
+        nominalPowerValue:
+          type: string
+          example: 5600.0
+        powerValueStr:
+          type: string
+          example: 0.6kW
+        monthValue:
+          type: string
+          example: 9.9
+        plantBean:
+          type: object
+          properties:
+            id:
+              type: number
+              example: 726415
+            plantName:
+              type: string
+              example: ProGeek PV
+            userBean:
+              type: string
+              format: nullable
+            userAccount:
+              type: string
+              example: ProGeek
+            pairViewUserAccount:
+              type: string
+              format: nullable
+            parentID:
+              type: string
+              format: nullable
+            createDate:
+              type: number
+              example: 1630598400000
+            nominalPower:
+              type: number
+              example: 5600
+            designCompany:
+              type: string
+              example: 0
+            country:
+              type: string
+              example: Romania
+            city:
+              type: string
+              example: Cosoveni
+            timezone:
+              type: number
+              example: 2
+            plant_lat:
+              type: string
+              example: 44.25
+            plant_lng:
+              type: string
+              example: 23.933331
+            latitude_d:
+              type: string
+              format: nullable
+            latitude_f:
+              type: string
+              format: nullable
+            latitude_m:
+              type: string
+              format: nullable
+            longitude_d:
+              type: string
+              format: nullable
+            longitude_f:
+              type: string
+              format: nullable
+            longitude_m:
+              type: string
+              format: nullable
+            formulaMoney:
+              type: number
+              example: 0
+            formulaMoneyUnitId:
+              type: string
+              example: dollar
+            fixedPowerPrice:
+              type: number
+              example: 0
+            peakPeriodPrice:
+              type: number
+              example: 0
+            flatPeriodPrice:
+              type: number
+              example: 0
+            valleyPeriodPrice:
+              type: number
+              example: 0
+            formulaCoal:
+              type: number
+              example: 0
+            formulaCo2:
+              type: number
+              example: 0
+            formulaSo2:
+              type: number
+              example: 0
+            formulaTree:
+              type: number
+              example: 0
+            plantImgName:
+              type: string
+              example: 726415_1images1645288119.jpg
+            locationImgName:
+              type: string
+              format: nullable
+            logoImgName:
+              type: string
+              example:
+            plantType:
+              type: number
+              example: 0
+            phoneNum:
+              type: string
+              format: nullable
+            remark:
+              type: string
+              format: nullable
+            companyName:
+              type: string
+              example:
+            defaultPlant:
+              type: boolean
+            isShare:
+              type: boolean
+            plantAddress:
+              type: string
+              example: Strada Mare 207205
+            mapCity:
+              type: string
+              format: nullable
+            mapLat:
+              type: string
+              format: nullable
+            mapLng:
+              type: string
+              format: nullable
+            eToday:
+              type: number
+              example: 0
+            eTotal:
+              type: number
+              example: 164.6
+            energyMonth:
+              type: number
+              example: 0
+            energyYear:
+              type: number
+              example: 0
+            irradiance:
+              type: number
+              example: 0
+            envTemp:
+              type: number
+              example: 0
+            panelTemp:
+              type: number
+              example: 0
+            windSpeed:
+              type: number
+              example: 0
+            windAngle:
+              type: number
+              example: 0
+            storage_TodayToUser:
+              type: number
+              example: 0
+            storage_TotalToUser:
+              type: number
+              example: 0
+            storage_TodayToGrid:
+              type: number
+              example: 0
+            storage_TotalToGrid:
+              type: number
+              example: 0
+            storage_eChargeToday:
+              type: number
+              example: 0
+            storage_eDisChargeToday:
+              type: number
+              example: 0
+            storage_BattoryPercentage:
+              type: number
+              example: 0
+            hasDeviceOnLine:
+              type: number
+              example: 0
+            hasStorage:
+              type: number
+              example: 0
+            createDateText:
+              type: string
+              format: date
+              example: 2021-09-03
+            dataLogList:
+              type: string
+              format: nullable
+            currentPac:
+              type: number
+              example: 0
+            onLineEnvCount:
+              type: number
+              example: 0
+            etodayMoney:
+              type: number
+              example: 0
+            etotalMoney:
+              type: number
+              example: 0
+            deviceCount:
+              type: number
+              example: 0
+            alarmValue:
+              type: number
+              example: 0
+            eventMessBeanList:
+              type: string
+              format: nullable
+            formulaMoneyStr:
+              type: string
+              format: nullable
+            unitMap:
+              type: string
+              format: nullable
+            alias:
+              type: string
+              format: nullable
+            status:
+              type: number
+              example: 0
+            paramBean:
+              type: string
+              format: nullable
+            currentPacStr:
+              type: string
+              format: nullable
+            nominalPowerStr:
+              type: string
+              example: 5.6kWp
+            map_countryId:
+              type: number
+              example: 0
+            map_provinceId:
+              type: number
+              example: 0
+            map_areaId:
+              type: number
+              example: 0
+            map_cityId:
+              type: number
+              example: 0
+            prToday:
+              type: string
+              format: nullable
+            prMonth:
+              type: string
+              format: nullable
+            level:
+              type: number
+              example: 1
+            emonthCo2Text:
+              type: string
+              example: 0
+            children:
+              type: string
+              format: nullable
+            timezoneText:
+              type: string
+              example: GMT+2
+            longitudeText:
+              type: string
+              example: null°null′null″
+            latitudeText:
+              type: string
+              example: null°null′null″
+            createDateTextA:
+              type: string
+              format: nullable
+            plantFromBean:
+              type: string
+              format: nullable
+            treeName:
+              type: string
+              example: ProGeek PV
+            treeID:
+              type: string
+              example: PLANT_726415
+            imgPath:
+              type: string
+              example: css/img/plant.gif
+            moneyUnitText:
+              type: string
+              example: $
+            etodayMoneyText:
+              type: string
+              example: 0
+            etodayCoalText:
+              type: string
+              example: 0
+            etodayCo2Text:
+              type: string
+              example: 0
+            etodaySo2Text:
+              type: string
+              example: 0
+            emonthMoneyText:
+              type: string
+              example: 0
+            eyearMoneyText:
+              type: string
+              example: 0
+            emonthCoalText:
+              type: string
+              example: 0
+            emonthSo2Text:
+              type: string
+              example: 0
+            etotalMoneyText:
+              type: string
+              example: 0
+            etotalSo2Text:
+              type: string
+              example: 4.9
+            currentPacTxt:
+              type: string
+              example: 0
+            etotalCo2Text:
+              type: string
+              example: 164.1
+            etotalCoalText:
+              type: string
+              example: 65.8
+            etotalFormulaTreeText:
+              type: string
+              example: 9.1
+        todayStr:
+          type: string
+          example: 4.7kWh
+        monthStr:
+          type: string
+          example: 9.9kWh
+        formulaCoalStr:
+          type: string
+          example: 65.8kg
+        alarmValue:
+          type: number
+          example: 0
+        yearStr:
+          type: string
+          example: 0kWh
+        isHaveTigo:
+          type: number
+          example: 0
+        formulaCoalValue:
+          type: string
+          example: 65.8
+    LoginResponse:
+      type: object
+      properties:
+        back:
+          type: object
+          properties:
+            deviceCount:
+              type: string
+              example: 2
+            data:
+              type: array
+              items:
+                type: object
+                properties:
+                  plantName:
+                    type: string
+                    example: <OSS Name of the plant>
+                  plantId:
+                    type: string
+                    example: <OSS PLANT ID>
+            isOpenSmartFamily:
+              type: number
+              example: 0
+            isCheckUserAuth:
+              type: boolean
+            msg:
+              type: string
+              example:
+            isEicUserAddSmartDevice:
+              type: boolean
+            isOpenDeviceList:
+              type: number
+              example: 1
+            isOpenDeviceParams:
+              type: number
+              example: 0
+            quality:
+              type: string
+              example: 0
+            service:
+              type: string
+              example: 1
+            totalData:
+              type: object
+              properties: {}
+            user:
+              type: object
+              properties:
+                uid:
+                  type: string
+                  example:
+                userLanguage:
+                  type: string
+                  example: en
+                inverterGroup:
+                  type: array
+                  items: {}
+                timeZone:
+                  type: number
+                  example: 2
+                lng:
+                  type: string
+                  example:
+                dataAcqList:
+                  type: array
+                  items: {}
+                type:
+                  type: number
+                  example: 0
+                password:
+                  type: string
+                  example: <OSS Account hash password>
+                kind:
+                  type: number
+                  example: 0
+                isValiPhone:
+                  type: number
+                  example: 0
+                mailNotice:
+                  type: boolean
+                id:
+                  type: number
+                  example: 962874
+                lastLoginIp:
+                  type: string
+                  format: ipv4
+                  example: 100.120.96.55
+                userDeviceType:
+                  type: number
+                  example: -1
+                registerType:
+                  type: string
+                  example: 0
+                phoneNum:
+                  type: string
+                  example: <OSS Phone Number>
+                approved:
+                  type: boolean
+                area:
+                  type: string
+                  example: Europe
+                smsNotice:
+                  type: boolean
+                isAgent:
+                  type: number
+                  example: 0
+                token:
+                  type: string
+                  example: <OSS TOKEN>
+                nickName:
+                  type: string
+                  example:
+                parentUserId:
+                  type: number
+                  example: 0
+                customerCode:
+                  type: string
+                  example:
+                counrty:
+                  type: string
+                  example: Romania
+                isPhoneNumReg:
+                  type: number
+                  example: 0
+                createDate:
+                  type: string
+                  format: date-time
+                  example: 2021-09-04 00:00:06
+                rightlevel:
+                  type: number
+                  example: 1
+                appType:
+                  type: string
+                  example:
+                serverUrl:
+                  type: string
+                  example:
+                lat:
+                  type: string
+                  example:
+                lastLoginTime:
+                  type: string
+                  format: date-time
+                  example: 2022-03-02 20:47:51
+                roleId:
+                  type: number
+                  example: 0
+                enabled:
+                  type: boolean
+                agentCode:
+                  type: string
+                  example: BBFG7
+                inverterList:
+                  type: array
+                  items: {}
+                isValiEmail:
+                  type: number
+                  example: 0
+                accountName:
+                  type: string
+                  example: <OSS Account Name>
+                accountNameOss:
+                  type: string
+                  example: ProGeek
+                email:
+                  type: string
+                  format: email
+                  example: <OSS email address>
+                company:
+                  type: string
+                  example: <OSS Account Company Name>
+                activeName:
+                  type: string
+                  example:
+                codeIndex:
+                  type: number
+                  example: 1
+                appAlias:
+                  type: string
+                  example: <OSS Account alias name>
+                isBigCustomer:
+                  type: number
+                  example: 0
+                noticeType:
+                  type: string
+                  example:
+            success:
+              type: boolean
+            app_code:
+              type: string
+              example: 1
+            isViewDeviceInfo:
+              type: boolean
+    LoginWebForm:
+      type: object
+      properties:
+        userName:
+          type: string
+          format: uri
+          example: growatt_oss_username
+          maxLength: 30
+        password:
+          type: string
+          format: string
+          example: growatt_oss_password
+          description: Tha password must be encoded and not in plain text
+          maxLength: 32
+      required:
+        - userName
+        - password
+tags:
+  - name: Login
+    description: Login procedure and something more
+  - name: PlantDetails
+    description: Get the specific plan details
+  - name: StorageAPI
+    description: Get the storage infomation
+security:
+  - ApiKeyAuth: []
