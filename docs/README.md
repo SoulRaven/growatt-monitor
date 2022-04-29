@@ -1,0 +1,1 @@
+- Swagger definition object generator: https://roger13.github.io/SwagDefGen/

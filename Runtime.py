@@ -41,9 +41,9 @@ from datetime import datetime
 from pvoutput.asyncio import PVOutput
 from influxdb_client import InfluxDBClient, WriteOptions
 
-from growatt_monitor.conf import settings
-from growatt_monitor.core.web.GrowattWeb import GrowattWeb, Timespan
-from growatt_monitor.core.pvoutput.PVOutputAPI import PVOutputAPI
+from roundBox.conf import settings
+from roundBox.core.web.GrowattWeb import GrowattWeb, Timespan
+from roundBox.core.pvoutput.PVOutputAPI import PVOutputAPI
 
 log = logging.getLogger('growatt_logging')
 

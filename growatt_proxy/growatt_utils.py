@@ -34,7 +34,7 @@
 
 import logging
 
-from growatt_monitor.conf import settings
+from roundBox.conf import settings
 
 log = logging.getLogger('growatt_logging')
 

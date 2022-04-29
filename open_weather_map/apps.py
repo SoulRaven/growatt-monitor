@@ -32,27 +32,20 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+import os
 import time
-import multiprocessing
 
-from growatt_monitor.apps import AppConfig
-
-from growatt_monitor.utils.decorators import logger_wraps
-
-from loguru import logger
+from RoundBox.apps import AppConfig
 
 
 class OpenWeatherMapConfig(AppConfig):
     name = 'open_weather_map'
     verbose_name = 'Open Weather Map'
 
-    # @logger_wraps()
-    def ready(self, queue, rlock):
+    def ready(self):
         import open_weather_map.signals # noqa
 
-        current_process = multiprocessing.current_process()
-        logger.info('Start the Open Weather Map application')
-        logger.info(f'Open Weather Map process name {current_process.name}[{current_process.pid}]')
-
-        while True:
-            time.sleep(1)
+        # logger.info(f'Start {self.verbose_name}[{os.getpid()}]')
+        #
+        # while True:
+        #     time.sleep(1)

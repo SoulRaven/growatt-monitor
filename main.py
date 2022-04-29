@@ -1,34 +1,17 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.10
 #  -*- coding: utf-8 -*-
-#
-#  Copyright (C) 2020-2022 ProGeek
-#
-#  This program is free software: you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation, either version 3 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-import logging
 import sys
+import os
 
-from growatt_monitor import setup
-from growatt_monitor.conf import settings
-from loguru import logger
+from RoundBox import setup
+
+os.environ.setdefault('ROUNDBOX_SETTINGS_MODULE', 'growatt_monitor.settings')
 
 if __name__ == '__main__':
-    logger.info("Start the Growatt Monitor script")
 
     try:
         setup()
     except KeyboardInterrupt:
-        logger.warning("Growatt Monitor script interrupted")
-        sys.exit(0)
+        sys.exit(1)
