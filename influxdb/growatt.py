@@ -49,7 +49,7 @@ class GrowattInfluxDB(InfluxDB):
         total = entities.get('total')
         devices = entities.get('devices')
 
-        for device in total:
+        for device in devices:
             print(device)
 
         # for key, val in devices.items():

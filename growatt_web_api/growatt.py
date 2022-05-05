@@ -267,8 +267,7 @@ class GrowattAppliance:
         self.sensors = []
 
     def __str__(self):
-        return f"<GrowattAppliance SN:{self.serial_number}[{self.device_alias}] " \
-               f"Plant Name: {self.plant_name}[{self.plant_id}]>"
+        return f"<GrowattAppliance SN:{self.serial_number}[{self.device_alias}]>"
 
     @property
     def serial_number(self):

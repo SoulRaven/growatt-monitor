@@ -1,36 +1,5 @@
 #  -*- coding: utf-8 -*-
 
-#  -*- coding: utf-8 -*-
-#
-#  Copyright (C) 2020-2022 ProGeek
-#
-#  This program is free software: you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation, either version 3 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-#
-#
-#  This program is free software: you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation, either version 3 of the License, or
-#  (at your option) any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import logging
 import asyncio
@@ -49,18 +18,19 @@ log = logging.getLogger('growatt_logging')
 
 
 class Runtime:
-
     def __init__(self, *args, **kwargs):
 
         # first thing import the signals
-        import signals # noqa
+        import signals  # noqa
 
         # Growatt CLI args
         self.growatt_username = kwargs.get('username', getattr(settings, 'GROWATT_USERNAME', ""))
         self.growatt_password = kwargs.get('password', getattr(settings, 'GROWATT_PASSWORD', ""))
 
         self.pvoutput_key = kwargs.get('pv_output_key', getattr(settings, 'PV_OUTPUT_KEY', ""))
-        self.pvoutput_system_id = kwargs.get('pv_output_system_id', getattr(settings, 'PV_OUTPUT_SYSTEM_ID', 0))
+        self.pvoutput_system_id = kwargs.get(
+            'pv_output_system_id', getattr(settings, 'PV_OUTPUT_SYSTEM_ID', 0)
+        )
 
         if self.pvoutput_key:
             self.pvoutput = PVOutputAPI(self.pvoutput_key, self.pvoutput_system_id)
@@ -116,24 +86,30 @@ class Runtime:
             "v4": 450,  # power consumption
             "v5": self.owm.temperature,  # temperature
             "v6": 234.0,  # voltage
-
         }
         async with aiohttp.ClientSession() as session:
-            pvo = PVOutput(apikey=self.pvoutput_key, systemid=self.pvoutput_system_id, session=session)
+            pvo = PVOutput(
+                apikey=self.pvoutput_key, systemid=self.pvoutput_system_id, session=session
+            )
             await pvo.addstatus(data)
 
     def insert_to_influxdb(self):
 
-        with InfluxDBClient(url=self.influxdb_url, token=self.influxdb_token, org=self.influxdb_org) as _client:
-            with _client.write_api(write_options=WriteOptions(batch_size=settings.INFLUXDB_BATH_SIZE,
-                                                              flush_interval=settings.INFLUXDB_FLUSH_INTERVAL,
-                                                              jitter_interval=settings.INFLUXDB_JITTER_INTERVAL,
-                                                              retry_interval=settings.INFLUXDB_RETRY_INTERVAL,
-                                                              max_retries=settings.INFLUXDB_MAX_RETRIES,
-                                                              max_retry_delay=settings.INFLUXDB_MAX_RETRY_DELAY,
-                                                              exponential_base=settings.INFLUXDB_EXPONENTIAL_BASE)) as _write_client:
+        with InfluxDBClient(
+            url=self.influxdb_url, token=self.influxdb_token, org=self.influxdb_org
+        ) as _client:
+            with _client.write_api(
+                write_options=WriteOptions(
+                    batch_size=settings.INFLUXDB_BATH_SIZE,
+                    flush_interval=settings.INFLUXDB_FLUSH_INTERVAL,
+                    jitter_interval=settings.INFLUXDB_JITTER_INTERVAL,
+                    retry_interval=settings.INFLUXDB_RETRY_INTERVAL,
+                    max_retries=settings.INFLUXDB_MAX_RETRIES,
+                    max_retry_delay=settings.INFLUXDB_MAX_RETRY_DELAY,
+                    exponential_base=settings.INFLUXDB_EXPONENTIAL_BASE,
+                )
+            ) as _write_client:
                 pass
 
     def publish_to_mqtt(self):
         pass
-

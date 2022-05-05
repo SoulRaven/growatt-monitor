@@ -46,33 +46,24 @@ class BatchingCallback:
 
 
 class InfluxDB:
-    def __init__(
-        self, url, token, org, gzip=True, timeout=10_000, connect=5, read=2, redirect=5, **kwargs
-    ):
+    def __init__(self, url, token, org, **kwargs):
         """
 
         :param url:
         :param token:
         :param org:
-        :param gzip:
-        :param timeout:
-        :param connect:
-        :param read:
-        :param redirect:
         :param kwargs:
         """
 
-        self.connection = self._connection(
-            url=url,
-            token=token,
-            org=org,
-            gzip=gzip,
-            timeout=timeout,
-            connect=connect,
-            read=read,
-            redirect=redirect,
-            **kwargs,
-        )
+        options = {
+            'gzip': app_settings.INFLUXDB_GZIP,
+            'timeout': app_settings.INFLUXDB_TIMEOUT,
+            'connect': app_settings.INFLUXDB_CONNECT,
+            'read': app_settings.INFLUXDB_READ,
+            'redirect': app_settings.INFLUXDB_REDIRECT,
+        }
+
+        self.connection = self._connection(url=url, token=token, org=org, **options, **kwargs)
 
         if self.connection.ping():
             self._write_api = self.connection.write_api(

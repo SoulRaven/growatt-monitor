@@ -8,10 +8,14 @@ INFLUXDB_SSL: bool = False
 INFLUXDB_HOST: str = '10.10.13.69'
 INFLUXDB_PORT: int = 8086
 INFLUXDB_URL: str = f"{'https' if INFLUXDB_SSL else 'http'}://{INFLUXDB_HOST}:{INFLUXDB_PORT}"
-INFLUXDB_GZIP: bool = True
-INFLUXDB_TIMEOUT: int = 10_000
 INFLUXDB_TOKEN: str = "my-token"
 INFLUXDB_ORG: str = "my-org"
+
+INFLUXDB_GZIP: bool = True
+INFLUXDB_TIMEOUT: int = 10_000
+INFLUXDB_CONNECT: int = 5
+INFLUXDB_READ: int = 2
+INFLUXDB_REDIRECT: int = 5
 
 ####################################
 # InfluxDB default settings        #

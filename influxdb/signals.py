@@ -10,13 +10,6 @@ from growatt_web_api.growatt import growatt_runtime
 from . import growatt
 
 
-influxdb_url = getattr(app_settings, 'INFLUXDB_URL')
-influxdb_token = getattr(app_settings, 'INFLUXDB_TOKEN')
-influxdb_org = getattr(app_settings, 'INFLUXDB_ORG')
-influxdb_gzip = getattr(app_settings, 'INFLUXDB_GZIP')
-influxdb_timeout = getattr(app_settings, 'INFLUXDB_TIMEOUT')
-
-
 @receiver(runtime_send, sender=growatt_runtime)
 def receiver_growatt_runtime(sender, **kwargs):
     """
@@ -26,7 +19,14 @@ def receiver_growatt_runtime(sender, **kwargs):
     :return:
     """
 
+    influxdb_url = getattr(app_settings, 'INFLUXDB_URL')
+    influxdb_token = getattr(app_settings, 'INFLUXDB_TOKEN')
+    influxdb_org = getattr(app_settings, 'INFLUXDB_ORG')
+    influxdb_gzip = getattr(app_settings, 'INFLUXDB_GZIP')
+    influxdb_timeout = getattr(app_settings, 'INFLUXDB_TIMEOUT')
+
     entities = kwargs.get('entities')
+
     with growatt.GrowattInfluxDB(
         url=influxdb_url,
         token=influxdb_token,
