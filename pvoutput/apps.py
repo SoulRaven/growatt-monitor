@@ -3,10 +3,9 @@
 import os
 import time
 
-
 from RoundBox.apps import AppConfig
-from RoundBox.conf.project_settings import settings
 from RoundBox.conf.app_settings import app_settings
+from RoundBox.conf.project_settings import settings
 
 
 class PVOutputConfig(AppConfig):

@@ -1,4 +1,3 @@
-
 from RoundBox.core.cliparser.jobs import BaseJob, HourlyJob
 
 

@@ -2,8 +2,8 @@
 #  -*- coding: utf-8 -*-
 
 
-import sys
 import os
+import sys
 
 from RoundBox import setup
 

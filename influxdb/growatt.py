@@ -1,41 +1,34 @@
 #  -*- coding: utf-8 -*-
 
+from datetime import datetime, timezone
+from pprint import pprint
+
 from RoundBox.conf.app_settings import app_settings
 
-from pprint import pprint
 from .influxdb import InfluxDB
 
 
 class GrowattInfluxDB(InfluxDB):
     def __init(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-    def tags_for_measurements(self, data) -> dict:
         """
 
-        :param data:
+        :param args:
+        :param kwargs:
         :return:
         """
-        tags = {}
+        super().__init__(*args, **kwargs)
 
-        for tag in data:
-            # print(tag.device_info)
-            tags.update(
-                {
-                    'plantName': tag.device_info.get('plant_name'),
-                    'plantID': tag.device_info.get('plant_id'),
-                    'serial_number': tag.probe.get_data('serialNum'),
-                    'device_mode': tag.probe.get_data('storageType'),
-                }
-            )
-
-        return tags
-
-    def fields_for_measurement(self, data) -> dict:
+    def build_fields(self, data) -> dict:
 
         measurements = {}
         for field in data:
-            measurements.update({field.entity_description.key: field.native_value})
+
+            try:
+                value = float(field.native_value)
+            except:
+                pass
+
+            measurements.update({field.api_key: value})
         return measurements
 
     def process_data(self, entities):
@@ -44,27 +37,34 @@ class GrowattInfluxDB(InfluxDB):
         :param entities:
         :return:
         """
-        data = []
+        data_buffer = []
 
-        total = entities.get('total')
+        totals = entities.get('total')
         devices = entities.get('devices')
 
+        time = datetime.now(timezone.utc)
+
+        for total in totals:
+
+            tags = {'plant_name': total.plant_name, 'plant_id': total.plant_id}
+            fields = self.build_fields(total.totals)
+
+            point = self.create_point(measurement='GrowattPV', tags=tags, fields=fields, time=time)
+
+            data_buffer.append(point)
+
         for device in devices:
-            print(device)
 
-        # for key, val in devices.items():
-        #     _device = {
-        #         "measurement": 'GrowattPV',
-        #         "tags": self.tags_for_measurements(val),
-        #         "fields": self.fields_for_measurement(val),
-        #     }
-        #     data.append(_device)
+            tags = {
+                'plant_name': device.plant_name,
+                'plant_id': device.plant_id,
+                'device_alias': device.device_alias,
+                'serial_number': device.serial_number,
+            }
+            fields = self.build_fields(device.sensors)
 
-        # data_total = {
-        #     "measurement": 'GrowattPV',
-        #     "tags": self.tags_for_measurements(total),
-        #     "fields": self.fields_for_measurement(total),
-        # }
-        #
-        # data.append(data_total)
-        return data
+            point = self.create_point(measurement='GrowattPV', tags=tags, fields=fields, time=time)
+
+            data_buffer.append(point)
+
+        return data_buffer

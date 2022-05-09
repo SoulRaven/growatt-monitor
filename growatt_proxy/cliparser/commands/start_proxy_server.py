@@ -16,19 +16,18 @@
 #  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import errno
-import re
 import os
-import sys
+import re
 import socket
-
+import sys
 from datetime import datetime
 
-from RoundBox.conf.project_settings import settings
 from RoundBox.apps import apps
+from RoundBox.conf.project_settings import settings
 from RoundBox.core import checks
 from RoundBox.core.cliparser import BaseCommand, CommandError
-from RoundBox.utils.regex_helper import _lazy_re_compile
 from RoundBox.utils import autoreload
+from RoundBox.utils.regex_helper import _lazy_re_compile
 
 naiveip_re = _lazy_re_compile(
     r"""^(?:
@@ -65,7 +64,7 @@ class Command(BaseCommand):
             "--addrport",
             action="store",
             dest="addrport",
-            help="Optional port number, or ipaddr:port"
+            help="Optional port number, or ipaddr:port",
         )
         parser.add_argument(
             "--bind-ip",
@@ -163,54 +162,54 @@ class Command(BaseCommand):
             self.inner_run(None, **options)
 
     def inner_run(self, *args, **options):
-            """
+        """
 
-            :param args:
-            :param options:
-            :return:
-            """
-            shutdown_message = options.get("shutdown_message", "")
-            quit_command = "CTRL-BREAK" if sys.platform == "win32" else "CONTROL-C"
+        :param args:
+        :param options:
+        :return:
+        """
+        shutdown_message = options.get("shutdown_message", "")
+        quit_command = "CTRL-BREAK" if sys.platform == "win32" else "CONTROL-C"
 
-            if not options["skip_checks"]:
-                self.stdout.write("Performing system checks...\n\n")
-                self.check(display_num_errors=True)
+        if not options["skip_checks"]:
+            self.stdout.write("Performing system checks...\n\n")
+            self.check(display_num_errors=True)
 
-            now = datetime.now().strftime("%B %d, %Y - %X")
-            self.stdout.write(now)
-            self.stdout.write(
-                (
-                    "Growatt Proxy Server running on RoundBox version %(version)s\n"
-                    "Using settings %(settings)r\n"
-                    "Starting server on %(addr)s:%(port)s\n\n"
-                    "Quit the server with %(quit_command)s."
-                )
-                % {
-                    "version": self.get_version(),
-                    "settings": settings.SETTINGS_MODULE,
-                    "addr": "[%s]" % self.addr if self._raw_ipv6 else self.addr,
-                    "port": self.port,
-                    "quit_command": quit_command,
-                }
+        now = datetime.now().strftime("%B %d, %Y - %X")
+        self.stdout.write(now)
+        self.stdout.write(
+            (
+                "Growatt Proxy Server running on RoundBox version %(version)s\n"
+                "Using settings %(settings)r\n"
+                "Starting server on %(addr)s:%(port)s\n\n"
+                "Quit the server with %(quit_command)s."
             )
+            % {
+                "version": self.get_version(),
+                "settings": settings.SETTINGS_MODULE,
+                "addr": "[%s]" % self.addr if self._raw_ipv6 else self.addr,
+                "port": self.port,
+                "quit_command": quit_command,
+            }
+        )
 
+        try:
+            pass
+        except OSError as e:
+            # Use helpful error messages instead of ugly tracebacks.
+            errors = {
+                errno.EACCES: "You don't have permission to access that port.",
+                errno.EADDRINUSE: "That port is already in use.",
+                errno.EADDRNOTAVAIL: "That IP address can't be assigned to.",
+            }
             try:
-                pass
-            except OSError as e:
-                # Use helpful error messages instead of ugly tracebacks.
-                errors = {
-                    errno.EACCES: "You don't have permission to access that port.",
-                    errno.EADDRINUSE: "That port is already in use.",
-                    errno.EADDRNOTAVAIL: "That IP address can't be assigned to.",
-                }
-                try:
-                    error_text = errors[e.errno]
-                except KeyError:
-                    error_text = e
-                self.stderr.write("Error: %s" % error_text)
-                # Need to use an OS exit because sys.exit doesn't work in a thread
-                os._exit(1)
-            except KeyboardInterrupt:
-                if shutdown_message:
-                    self.stdout.write(shutdown_message)
-                sys.exit(0)
+                error_text = errors[e.errno]
+            except KeyError:
+                error_text = e
+            self.stderr.write("Error: %s" % error_text)
+            # Need to use an OS exit because sys.exit doesn't work in a thread
+            os._exit(1)
+        except KeyboardInterrupt:
+            if shutdown_message:
+                self.stdout.write(shutdown_message)
+            sys.exit(0)

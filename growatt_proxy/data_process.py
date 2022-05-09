@@ -3,7 +3,6 @@
 # @TODO: move this file, and find a propper location
 
 import logging
-
 from itertools import cycle  # to support "cycling" the iterator
 
 from RoundBox.conf.project_settings import settings

@@ -19,16 +19,15 @@ import sys
 import time
 
 from loguru import logger
-
-from RoundBox.conf.project_settings import settings
 from RoundBox.conf.app_settings import app_settings
+from RoundBox.conf.project_settings import settings
 from RoundBox.utils.data_process import decrypt
 
-from .signals import (init_proxy, on_accept, on_recv, on_close)
+from .signals import init_proxy, on_accept, on_close, on_recv
 
 # to resolve errno 32: broken pipe issue (only linux)
 if sys.platform != 'win32':
-    from signal import signal, SIGPIPE, SIG_DFL  # noqa
+    from signal import SIG_DFL, SIGPIPE, signal  # noqa
 
 # Changing the buffer_size and delay, you can improve the speed and bandwidth.
 # But when buffer get to high or delay go too down, you can break things
@@ -71,9 +70,13 @@ class Proxy:
         self.server.bind((growatt_proxy_bind_ip, app_settings.GROWATT_PROXY_BIND_PORT))
 
         try:
-            hostname = (socket.gethostname())
+            hostname = socket.gethostname()
             logger.info("Hostname : {}".format(hostname))
-            logger.info("IP: {}, PORT: {}".format(socket.gethostbyname(hostname), app_settings.GROWATT_PROXY_BIND_PORT))
+            logger.info(
+                "IP: {}, PORT: {}".format(
+                    socket.gethostbyname(hostname), app_settings.GROWATT_PROXY_BIND_PORT
+                )
+            )
         except:
             logger.error("IP and port information not available")
 
@@ -164,7 +167,9 @@ class Proxy:
                     if header[14:16] == "18":
                         # do not block if configure time command of configure IP (if noipf flag set)
                         logger.info("Shine Configure command detected")
-                        if conf_cmd == "001f" or (conf_cmd == "0011" and settings.GROWATT_NO_IP_CHANGE):
+                        if conf_cmd == "001f" or (
+                            conf_cmd == "0011" and settings.GROWATT_NO_IP_CHANGE
+                        ):
                             block_flag = False
                             if conf_cmd == "001f":
                                 conf_cmd = "Time"

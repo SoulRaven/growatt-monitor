@@ -43,7 +43,7 @@ class OpenWeatherMapConfig(AppConfig):
     verbose_name = 'Open Weather Map'
 
     def ready(self):
-        import open_weather_map.signals # noqa
+        import open_weather_map.signals  # noqa
 
         # logger.info(f'Start {self.verbose_name}[{os.getpid()}]')
         #

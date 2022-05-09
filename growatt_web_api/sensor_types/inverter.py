@@ -1,6 +1,5 @@
 #  -*- coding: utf-8 -*-
 
-from RoundBox.core.hass.components.sensor import SensorDeviceClass, SensorStateClass
 from RoundBox.const import (
     ELECTRIC_CURRENT_AMPERE,
     ELECTRIC_POTENTIAL_VOLT,
@@ -9,7 +8,7 @@ from RoundBox.const import (
     POWER_WATT,
     TEMP_CELSIUS,
 )
-
+from RoundBox.core.hass.components.sensor import SensorDeviceClass, SensorStateClass
 
 from .sensor_entity_description import GrowattSensorEntityDescription
 

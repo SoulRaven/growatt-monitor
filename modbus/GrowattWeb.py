@@ -18,10 +18,9 @@
 import datetime
 import logging
 
+from growattServer import GrowattApi, hash_password
 from RoundBox.conf import settings
 from RoundBox.core.exceptions import ImproperlyConfigured
-
-from growattServer import GrowattApi, hash_password
 
 log = logging.getLogger('growatt_logging')
 

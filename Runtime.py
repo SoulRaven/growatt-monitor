@@ -1,18 +1,17 @@
 #  -*- coding: utf-8 -*-
 
 
-import logging
 import asyncio
-import aiohttp
-
+import logging
 from datetime import datetime
 
-from pvoutput.asyncio import PVOutput
+import aiohttp
 from influxdb_client import InfluxDBClient, WriteOptions
-
 from roundBox.conf import settings
-from roundBox.core.web.GrowattWeb import GrowattWeb, Timespan
 from roundBox.core.pvoutput.PVOutputAPI import PVOutputAPI
+from roundBox.core.web.GrowattWeb import GrowattWeb, Timespan
+
+from pvoutput.asyncio import PVOutput
 
 log = logging.getLogger('growatt_logging')
 

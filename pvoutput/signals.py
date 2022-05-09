@@ -2,8 +2,8 @@
 
 from RoundBox.dispatch import receiver
 
-from growatt_web_api.signals import runtime_send
 from growatt_web_api.growatt import growatt_runtime
+from growatt_web_api.signals import runtime_send
 
 
 @receiver(runtime_send, sender=growatt_runtime)

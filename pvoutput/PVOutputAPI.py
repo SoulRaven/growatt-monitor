@@ -1,12 +1,11 @@
 #  -*- coding: utf-8 -*-
 
 import logging
-import requests
-from time import sleep, time
 from datetime import datetime
+from time import sleep, time
 
+import requests
 from RoundBox.conf.project_settings import settings
-
 
 logger = logging.getLogger(__name__)
 

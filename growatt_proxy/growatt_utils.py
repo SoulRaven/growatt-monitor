@@ -40,7 +40,6 @@ log = logging.getLogger('growatt_logging')
 
 
 class GrowattUtils:
-
     def __init__(self):
         self.block_cmd = {}
         self.recorddict = {}
@@ -69,7 +68,7 @@ class GrowattUtils:
             "5104",  # data record
             "5116",  # ping
             "5119",  # identify
-            "5150"  # Archived record
+            "5150",  # Archived record
         }
 
     def growatt_layouts(self):
@@ -126,7 +125,7 @@ class GrowattUtils:
                 "epvtotal": {"value": 310, "length": 4, "type": "num", "divide": 10},
                 "rac": {"value": 318, "length": 4, "type": "num", "divide": 1, "incl": "no"},
                 "eractoday": {"value": 326, "length": 4, "type": "num", "divide": 1, "incl": "no"},
-                "eractotal": {"value": 334, "length": 4, "type": "num", "divide": 1, "incl": "no"}
+                "eractotal": {"value": 334, "length": 4, "type": "num", "divide": 1, "incl": "no"},
             },
             "T05NNNN": {
                 "decrypt": {"value": "True"},
@@ -175,7 +174,7 @@ class GrowattUtils:
                 "epvtotal": {"value": 310, "length": 4, "type": "num", "divide": 10},
                 "rac": {"value": 318, "length": 4, "type": "num", "divide": 1, "incl": "no"},
                 "eractoday": {"value": 326, "length": 4, "type": "num", "divide": 1, "incl": "no"},
-                "eractotal": {"value": 334, "length": 4, "type": "num", "divide": 1, "incl": "no"}
+                "eractotal": {"value": 334, "length": 4, "type": "num", "divide": 1, "incl": "no"},
             },
             "T05NNNNX": {
                 "decrypt": {"value": "True"},
@@ -213,7 +212,7 @@ class GrowattUtils:
                 "pvtemperature": {"value": 450, "length": 2, "type": "num", "divide": 10},
                 "pvipmtemperature": {"value": 466, "length": 2, "type": "num", "divide": 10},
                 "pbusvolt": {"value": 470, "length": 2, "type": "num", "divide": 10, "incl": "no"},
-                "nbusvolt": {"value": 474, "length": 2, "type": "num", "divide": 10, "incl": "no"}
+                "nbusvolt": {"value": 474, "length": 2, "type": "num", "divide": 10, "incl": "no"},
             },
             "T06NNNN": {
                 "decrypt": {"value": "True"},
@@ -263,7 +262,13 @@ class GrowattUtils:
             },
             "T06NNNNX": {
                 "decrypt": {"value": "True"},
-                "datalogserial": {"value": 16, "length": 10, "type": "text", "divide": 10, "incl": "no"},
+                "datalogserial": {
+                    "value": 16,
+                    "length": 10,
+                    "type": "text",
+                    "divide": 10,
+                    "incl": "no",
+                },
                 "pvserial": {"value": 76, "length": 10, "type": "text", "divide": 10},
                 "date": {"value": 136, "divide": 10},
                 "recortype1": {"value": 150, "length": 2, "type": "num", "incl": "yes"},
@@ -298,7 +303,7 @@ class GrowattUtils:
                 "pvtemperature": {"value": 530, "length": 2, "type": "num", "divide": 10},
                 "pvipmtemperature": {"value": 546, "length": 2, "type": "num", "divide": 10},
                 "pbusvolt": {"value": 550, "length": 2, "type": "num", "divide": 10, "incl": "no"},
-                "nbusvolt": {"value": 554, "length": 2, "type": "num", "divide": 10, "incl": "no"}
+                "nbusvolt": {"value": 554, "length": 2, "type": "num", "divide": 10, "incl": "no"},
             },
             "T06NNNNXSPH": {
                 "decrypt": {"value": "True"},
@@ -339,11 +344,35 @@ class GrowattUtils:
                 "pvboosttemp": {"value": 538, "length": 2, "type": "num", "divide": 10},
                 "bat_dsp": {"value": 546, "length": 2, "type": "num", "divide": 10},
                 "pbusvolt": {"value": 550, "length": 2, "type": "num", "divide": 10, "incl": "no"},
-                "#nbusvolt": {"value": 554, "length": 2, "type": "num", "divide": 10, "incl": "no"},
+                "#nbusvolt": {
+                    "value": 554,
+                    "length": 2,
+                    "type": "num",
+                    "divide": 10,
+                    "incl": "no",
+                },
                 "#ipf": {"value": 558, "length": 2, "type": "num", "divide": 10, "incl": "no"},
-                "#realoppercent": {"value": 562, "length": 2, "type": "num", "divide": 100, "incl": "no"},
-                "#opfullwatt": {"value": 566, "length": 4, "type": "num", "divide": 10, "incl": "no"},
-                "#deratingmode": {"value": 574, "length": 2, "type": "num", "divide": 1, "incl": "no"},
+                "#realoppercent": {
+                    "value": 562,
+                    "length": 2,
+                    "type": "num",
+                    "divide": 100,
+                    "incl": "no",
+                },
+                "#opfullwatt": {
+                    "value": 566,
+                    "length": 4,
+                    "type": "num",
+                    "divide": 10,
+                    "incl": "no",
+                },
+                "#deratingmode": {
+                    "value": 574,
+                    "length": 2,
+                    "type": "num",
+                    "divide": 1,
+                    "incl": "no",
+                },
                 "eacharge_today": {"value": 606, "length": 4, "type": "num", "divide": 10},
                 "eacharge_total": {"value": 614, "length": 4, "type": "num", "divide": 10},
                 "batterytype": {"value": 634, "length": 2, "type": "num", "divide": 1},
@@ -361,16 +390,52 @@ class GrowattUtils:
                 "vbat": {"value": 718, "length": 2, "type": "num", "divide": 10},
                 "SOC": {"value": 722, "length": 2, "type": "num", "divide": 100},
                 "pactouserr": {"value": 726, "length": 4, "type": "num", "divide": 10},
-                "#pactousers": {"value": 734, "length": 4, "type": "num", "divide": 10, "incl": "no"},
-                "#pactousert": {"value": 742, "length": 4, "type": "num", "divide": 10, "incl": "no"},
+                "#pactousers": {
+                    "value": 734,
+                    "length": 4,
+                    "type": "num",
+                    "divide": 10,
+                    "incl": "no",
+                },
+                "#pactousert": {
+                    "value": 742,
+                    "length": 4,
+                    "type": "num",
+                    "divide": 10,
+                    "incl": "no",
+                },
                 "pactousertot": {"value": 750, "length": 4, "type": "num", "divide": 10},
                 "pactogridr": {"value": 758, "length": 4, "type": "num", "divide": 10},
-                "#pactogrids": {"value": 766, "length": 4, "type": "num", "divide": 10, "incl": "no"},
-                "#pactogridt": {"value": 774, "length": 4, "type": "num", "divide": 10, "incl": "no"},
+                "#pactogrids": {
+                    "value": 766,
+                    "length": 4,
+                    "type": "num",
+                    "divide": 10,
+                    "incl": "no",
+                },
+                "#pactogridt": {
+                    "value": 774,
+                    "length": 4,
+                    "type": "num",
+                    "divide": 10,
+                    "incl": "no",
+                },
                 "pactogridtot": {"value": 782, "length": 4, "type": "num", "divide": 10},
                 "plocaloadr": {"value": 790, "length": 4, "type": "num", "divide": 10},
-                "#plocaloads": {"value": 798, "length": 4, "type": "num", "divide": 10, "incl": "no"},
-                "#plocaloadt": {"value": 806, "length": 4, "type": "num", "divide": 10, "incl": "no"},
+                "#plocaloads": {
+                    "value": 798,
+                    "length": 4,
+                    "type": "num",
+                    "divide": 10,
+                    "incl": "no",
+                },
+                "#plocaloadt": {
+                    "value": 806,
+                    "length": 4,
+                    "type": "num",
+                    "divide": 10,
+                    "incl": "no",
+                },
                 "plocaloadtot": {"value": 814, "length": 4, "type": "num", "divide": 10},
                 "#ipm": {"value": 822, "length": 2, "type": "num", "divide": 10, "incl": "no"},
                 "#battemp": {"value": 826, "length": 2, "type": "num", "divide": 10, "incl": "no"},
@@ -385,11 +450,17 @@ class GrowattUtils:
                 "eharge1_tod": {"value": 890, "length": 4, "type": "num", "divide": 10},
                 "eharge1_tot": {"value": 898, "length": 4, "type": "num", "divide": 10},
                 "elocalload_tod": {"value": 906, "length": 4, "type": "num", "divide": 10},
-                "elocalload_tot": {"value": 914, "length": 4, "type": "num", "divide": 10}
+                "elocalload_tot": {"value": 914, "length": 4, "type": "num", "divide": 10},
             },
             "T05NNNNSPF": {
                 "decrypt": {"value": "True"},
-                "datalogserial": {"value": 16, "length": 10, "type": "text", "divide": 10, "incl": "no"},
+                "datalogserial": {
+                    "value": 16,
+                    "length": 10,
+                    "type": "text",
+                    "divide": 10,
+                    "incl": "no",
+                },
                 "pvserial": {"value": 36, "length": 10, "type": "text", "divide": 10},
                 "date": {"value": 56, "divide": 10},
                 "recortype1": {"value": 70, "length": 2, "type": "num", "incl": "no"},
@@ -447,7 +518,7 @@ class GrowattUtils:
                 "ACDischarVA": {"value": 370, "length": 4, "type": "num", "divide": 10},
                 "BatDischarWatt": {"value": 378, "length": 4, "type": "num", "divide": 10},
                 "BatDischarVA": {"value": 386, "length": 4, "type": "num", "divide": 10},
-                "BatWatt": {"value": 394, "length": 4, "type": "numx", "divide": 10}
+                "BatWatt": {"value": 394, "length": 4, "type": "numx", "divide": 10},
             },
             "T06NNNNSPF": {
                 "decrypt": {"value": "True"},
@@ -504,7 +575,7 @@ class GrowattUtils:
                 "ACDischarVA": {"value": 450, "length": 4, "type": "num", "divide": 10},
                 "BatDischarWatt": {"value": 458, "length": 4, "type": "num", "divide": 10},
                 "BatDischarVA": {"value": 466, "length": 4, "type": "num", "divide": 10},
-                "BatWatt": {"value": 474, "length": 4, "type": "numx", "divide": 10}
+                "BatWatt": {"value": 474, "length": 4, "type": "numx", "divide": 10},
             },
             "T06NNNNXTL3": {
                 "decrypt": {"value": "True"},
@@ -521,8 +592,20 @@ class GrowattUtils:
                 "pv2voltage": {"value": 186, "length": 2, "type": "num", "divide": 10},
                 "pv2current": {"value": 190, "length": 2, "type": "num", "divide": 10},
                 "pv2watt": {"value": 194, "length": 4, "type": "num", "divide": 10},
-                "pv3voltage": {"value": 202, "length": 2, "type": "num", "divide": 10, "incl": "no"},
-                "pv3current": {"value": 206, "length": 2, "type": "num", "divide": 10, "incl": "no"},
+                "pv3voltage": {
+                    "value": 202,
+                    "length": 2,
+                    "type": "num",
+                    "divide": 10,
+                    "incl": "no",
+                },
+                "pv3current": {
+                    "value": 206,
+                    "length": 2,
+                    "type": "num",
+                    "divide": 10,
+                    "incl": "no",
+                },
                 "pv3watt": {"value": 210, "length": 4, "type": "num", "divide": 10, "incl": "no"},
                 "pvpowerout": {"value": 298, "length": 4, "type": "numx", "divide": 10},
                 "pvfrequentie": {"value": 306, "length": 2, "type": "num", "divide": 100},
@@ -552,7 +635,7 @@ class GrowattUtils:
                 "temp4": {"value": 542, "length": 2, "type": "num", "divide": 10, "incl": "no"},
                 "uwBatVolt_DSP": {"value": 546, "length": 2, "type": "num", "divide": 10},
                 "pbusvolt": {"value": 550, "length": 2, "type": "num", "divide": 1},
-                "nbusvolt": {"value": 554, "length": 2, "type": "num", "divide": 1}
+                "nbusvolt": {"value": 554, "length": 2, "type": "num", "divide": 1},
             },
             "T060120": {
                 "decrypt": {"value": "True"},
@@ -560,45 +643,176 @@ class GrowattUtils:
                 "pvserial": {"value": 76, "length": 10, "type": "text", "divide": 10},
                 "date": {"value": 136, "divide": 10},
                 "voltage_l1": {"value": 160, "length": 4, "type": "num", "divide": 10},
-                "voltage_l2": {"value": 168, "length": 4, "type": "num", "divide": 10, "incl": "no"},
-                "voltage_l3": {"value": 176, "length": 4, "type": "num", "divide": 10, "incl": "no"},
+                "voltage_l2": {
+                    "value": 168,
+                    "length": 4,
+                    "type": "num",
+                    "divide": 10,
+                    "incl": "no",
+                },
+                "voltage_l3": {
+                    "value": 176,
+                    "length": 4,
+                    "type": "num",
+                    "divide": 10,
+                    "incl": "no",
+                },
                 "Current_l1": {"value": 184, "length": 4, "type": "num", "divide": 10},
-                "Current_l2": {"value": 192, "length": 4, "type": "num", "divide": 10, "incl": "no"},
-                "Current_l3": {"value": 200, "length": 4, "type": "num", "divide": 10, "incl": "no"},
+                "Current_l2": {
+                    "value": 192,
+                    "length": 4,
+                    "type": "num",
+                    "divide": 10,
+                    "incl": "no",
+                },
+                "Current_l3": {
+                    "value": 200,
+                    "length": 4,
+                    "type": "num",
+                    "divide": 10,
+                    "incl": "no",
+                },
                 "act_power_l1": {"value": 208, "length": 4, "type": "numx", "divide": 10},
-                "act_power_l2": {"value": 216, "length": 4, "type": "numx", "divide": 10, "incl": "no"},
-                "act_power_l3": {"value": 224, "length": 4, "type": "numx", "divide": 10, "incl": "no"},
+                "act_power_l2": {
+                    "value": 216,
+                    "length": 4,
+                    "type": "numx",
+                    "divide": 10,
+                    "incl": "no",
+                },
+                "act_power_l3": {
+                    "value": 224,
+                    "length": 4,
+                    "type": "numx",
+                    "divide": 10,
+                    "incl": "no",
+                },
                 "app_power_l1": {"value": 232, "length": 4, "type": "numx", "divide": 10},
-                "app_power_l2": {"value": 240, "length": 4, "type": "numx", "divide": 10, "incl": "no"},
-                "app_power_l3": {"value": 248, "length": 4, "type": "numx", "divide": 10, "incl": "no"},
+                "app_power_l2": {
+                    "value": 240,
+                    "length": 4,
+                    "type": "numx",
+                    "divide": 10,
+                    "incl": "no",
+                },
+                "app_power_l3": {
+                    "value": 248,
+                    "length": 4,
+                    "type": "numx",
+                    "divide": 10,
+                    "incl": "no",
+                },
                 "react_power_l1": {"value": 256, "length": 4, "type": "numx", "divide": 10},
-                "react_power_l2": {"value": 264, "length": 4, "type": "numx", "divide": 10, "incl": "no"},
-                "react_power_l3": {"value": 272, "length": 4, "type": "numx", "divide": 10, "incl": "no"},
+                "react_power_l2": {
+                    "value": 264,
+                    "length": 4,
+                    "type": "numx",
+                    "divide": 10,
+                    "incl": "no",
+                },
+                "react_power_l3": {
+                    "value": 272,
+                    "length": 4,
+                    "type": "numx",
+                    "divide": 10,
+                    "incl": "no",
+                },
                 "powerfactor_l1": {"value": 280, "length": 4, "type": "numx", "divide": 1000},
-                "powerfactor_l2": {"value": 288, "length": 4, "type": "numx", "divide": 1000, "incl": "no"},
-                "powerfactor_l3": {"value": 296, "length": 4, "type": "numx", "divide": 1000, "incl": "no"},
+                "powerfactor_l2": {
+                    "value": 288,
+                    "length": 4,
+                    "type": "numx",
+                    "divide": 1000,
+                    "incl": "no",
+                },
+                "powerfactor_l3": {
+                    "value": 296,
+                    "length": 4,
+                    "type": "numx",
+                    "divide": 1000,
+                    "incl": "no",
+                },
                 "pos_rev_act_power": {"value": 304, "length": 4, "type": "numx", "divide": 10},
-                "pos_act_power": {"value": 304, "length": 4, "type": "numx", "divide": 10, "incl": "no"},
-                "rev_act_power": {"value": 304, "length": 4, "type": "numx", "divide": 10, "incl": "no"},
+                "pos_act_power": {
+                    "value": 304,
+                    "length": 4,
+                    "type": "numx",
+                    "divide": 10,
+                    "incl": "no",
+                },
+                "rev_act_power": {
+                    "value": 304,
+                    "length": 4,
+                    "type": "numx",
+                    "divide": 10,
+                    "incl": "no",
+                },
                 "app_power": {"value": 312, "length": 4, "type": "numx", "divide": 10},
                 "react_power": {"value": 320, "length": 4, "type": "numx", "divide": 10},
                 "powerfactor": {"value": 328, "length": 4, "type": "numx", "divide": 1000},
                 "frequency": {"value": 336, "length": 4, "type": "num", "divide": 10},
-                "L1-2_voltage": {"value": 344, "length": 4, "type": "num", "divide": 10, "incl": "no"},
-                "L2-3_voltage": {"value": 352, "length": 4, "type": "num", "divide": 10, "incl": "no"},
-                "L3-1_voltage": {"value": 360, "length": 4, "type": "num", "divide": 10, "incl": "no"},
+                "L1-2_voltage": {
+                    "value": 344,
+                    "length": 4,
+                    "type": "num",
+                    "divide": 10,
+                    "incl": "no",
+                },
+                "L2-3_voltage": {
+                    "value": 352,
+                    "length": 4,
+                    "type": "num",
+                    "divide": 10,
+                    "incl": "no",
+                },
+                "L3-1_voltage": {
+                    "value": 360,
+                    "length": 4,
+                    "type": "num",
+                    "divide": 10,
+                    "incl": "no",
+                },
                 "pos_act_energy": {"value": 368, "length": 4, "type": "numx", "divide": 10},
                 "rev_act_energy": {"value": 376, "length": 4, "type": "numx", "divide": 10},
-                "pos_act_energy_kvar": {"value": 384, "length": 4, "type": "numx", "divide": 10, "incl": "no"},
-                "rev_act_energy_kvar": {"value": 392, "length": 4, "type": "numx", "divide": 10, "incl": "no"},
-                "app_energy_kvar": {"value": 400, "length": 4, "type": "numx", "divide": 10, "incl": "no"},
-                "act_energy_kwh": {"value": 408, "length": 4, "type": "numx", "divide": 10, "incl": "no"},
-                "react_energy_kvar": {"value": 416, "length": 4, "type": "numx", "divide": 10, "incl": "no"}
-            }
+                "pos_act_energy_kvar": {
+                    "value": 384,
+                    "length": 4,
+                    "type": "numx",
+                    "divide": 10,
+                    "incl": "no",
+                },
+                "rev_act_energy_kvar": {
+                    "value": 392,
+                    "length": 4,
+                    "type": "numx",
+                    "divide": 10,
+                    "incl": "no",
+                },
+                "app_energy_kvar": {
+                    "value": 400,
+                    "length": 4,
+                    "type": "numx",
+                    "divide": 10,
+                    "incl": "no",
+                },
+                "act_energy_kwh": {
+                    "value": 408,
+                    "length": 4,
+                    "type": "numx",
+                    "divide": 10,
+                    "incl": "no",
+                },
+                "react_energy_kvar": {
+                    "value": 416,
+                    "length": 4,
+                    "type": "numx",
+                    "divide": 10,
+                    "incl": "no",
+                },
+            },
         }
 
         if settings.DEBUG:
             log.debug("Growatt hardware layout loaded")
             for key in self.recorddict:
                 log.debug("{}: {}".format(key, self.recorddict[key]))
-

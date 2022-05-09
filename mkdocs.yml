@@ -1,0 +1,77 @@
+site_name: Growatt Monitor
+repo_url: https://github.com/soulraven/growatt-monitor
+site_url: https://soulraven.github.io/growatt-monitor
+site_description: A small lightweight framework for IoT applications
+site_author: Zaharia Constantin
+copyright: Maintained by <a href="https://progeek.ro">SoulRaven</a>.
+site_dir: "site"
+edit_uri: ""
+
+nav:
+  - Home:
+    - Overview: index.md
+    - Changelog: changelog.md
+    - Credits: credits.md
+    - License: license.md
+    - Libraries: libraries.md
+#  - Code Reference: reference/
+#  - Dev:
+#    - Coverage report: coverage.md
+  - Author's website: https://soulraven.github.io/
+
+plugins:
+  - search
+#  - coverage
+  - gen-files:
+      scripts:
+      - docs/gen_credits.py
+      - docs/gen_ref_nav.py
+  - literate-nav:
+      nav_file: SUMMARY.md
+
+theme:
+  name: material
+  feature:
+    - navigation.tabs
+    - navigation.top
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/brightness-4
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/brightness-7
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+
+extra_css:
+- css/material.css
+- css/mkdocstrings.css
+
+extra:
+  generator: true
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/soulraven
+      name: SoulRaven Github Profile
+
+
+markdown_extensions:
+  - admonition
+  - pymdownx.emoji
+  - pymdownx.magiclink
+  - pymdownx.snippets:
+      check_paths: true
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - pymdownx.tasklist
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.snippets:
+

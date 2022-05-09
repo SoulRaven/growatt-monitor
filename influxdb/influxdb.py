@@ -1,15 +1,13 @@
 #  -*- coding: utf-8 -*-
 
 import logging
-
 from datetime import datetime, timezone
-from urllib3 import Retry
 
 from influxdb_client import InfluxDBClient, Point, WriteOptions
 from influxdb_client.client.exceptions import InfluxDBError
 from influxdb_client.client.write_api import ASYNCHRONOUS, SYNCHRONOUS
-
 from RoundBox.conf.app_settings import app_settings
+from urllib3 import Retry
 
 logger = logging.getLogger(__name__)
 
@@ -46,7 +44,7 @@ class BatchingCallback:
 
 
 class InfluxDB:
-    def __init__(self, url, token, org, **kwargs):
+    def __init__(self, url, token, org, dry=False, **kwargs):
         """
 
         :param url:
@@ -54,6 +52,8 @@ class InfluxDB:
         :param org:
         :param kwargs:
         """
+
+        self.dry = dry
 
         options = {
             'gzip': app_settings.INFLUXDB_GZIP,
@@ -65,7 +65,7 @@ class InfluxDB:
 
         self.connection = self._connection(url=url, token=token, org=org, **options, **kwargs)
 
-        if self.connection.ping():
+        if self.is_alive:
             self._write_api = self.connection.write_api(
                 write_options=WriteOptions(write_type=SYNCHRONOUS)
             )
@@ -101,6 +101,18 @@ class InfluxDB:
         )
         return connection
 
+    def upload(self, data_points=None):
+        """Uploads data points to InfluxDB
+
+        :param data_points:
+        :return:
+        """
+
+        if data_points is not None and len(data_points) > 0:
+            if self.is_alive:
+                self._write_api.write(bucket=app_settings.INFLUXDB_BUCKET, record=data_points)
+                logger.info('Data upload on InfluxDB bucket')
+
     @property
     def is_alive(self):
         """
@@ -109,14 +121,7 @@ class InfluxDB:
         """
         return self.connection.ping() if self.connection else False
 
-    def tags_for_measurements(self, data) -> dict:
-        """
-
-        :return:
-        """
-        raise NotImplementedError('Subclasses must implement this')
-
-    def fields_for_measurement(self, data) -> list:
+    def build_fields(self, data) -> list:
         """
 
         :return:

@@ -3,28 +3,25 @@
 import datetime
 import json
 import logging
-
-from typing import Final, TypedDict
 from dataclasses import dataclass
+from typing import Final, TypedDict
 
+from growattServer import GrowattApi, Timespan, hash_password
 from RoundBox.apps import apps
-from RoundBox.conf.project_settings import settings
 from RoundBox.conf.app_settings import app_settings
+from RoundBox.conf.project_settings import settings
 from RoundBox.core.exceptions import ImproperlyConfigured
 from RoundBox.core.hass.components.sensor import DeviceInfo, ExtraOptions
 from RoundBox.utils import dt
 from RoundBox.utils.throttle import Throttle
 
-from growattServer import GrowattApi, hash_password, Timespan
-
-from .sensor_types.sensor_entity_description import GrowattSensorEntityDescription
 from .sensor_types.inverter import INVERTER_SENSOR_TYPES
 from .sensor_types.mix import MIX_SENSOR_TYPES
+from .sensor_types.sensor_entity_description import GrowattSensorEntityDescription
 from .sensor_types.storage import STORAGE_SENSOR_TYPES
 from .sensor_types.tlx import TLX_SENSOR_TYPES
 from .sensor_types.total import TOTAL_SENSOR_TYPES
-
-from .signals import pre_login, post_login, pre_logout, post_logout, runtime_send
+from .signals import post_login, post_logout, pre_login, pre_logout, runtime_send
 
 logger = logging.getLogger(__name__)
 
@@ -111,6 +108,7 @@ def growatt_runtime(options) -> None:
         probe = GrowattData(api, username, password, device["deviceSn"], device["deviceType"])
 
         sensor_descriptions: tuple[GrowattSensorEntityDescription, ...] = ()
+
         match device["deviceType"]:
             case "inverter":
                 sensor_descriptions = INVERTER_SENSOR_TYPES
@@ -133,7 +131,9 @@ def growatt_runtime(options) -> None:
             logger.info(f'Growatt server update for {device["deviceSn"]}')
 
         devices = GrowattAppliance(
-            InverterInfo(device=device, plant_info=PlantInfo(plantName=plant_name, plantId=plant_id))
+            InverterInfo(
+                device=device, plant_info=PlantInfo(plantName=plant_name, plantId=plant_id)
+            )
         )
 
         for description in sensor_descriptions:
@@ -223,7 +223,6 @@ class GrowattSensor:
 
 
 class GrowattTotal:
-
     def __init__(self, plant_info: PlantInfo):
         """
 
@@ -421,4 +420,3 @@ class GrowattData:
         :return:
         """
         return self.data.get(variable)
-

@@ -8,8 +8,11 @@ INFLUXDB_SSL: bool = False
 INFLUXDB_HOST: str = '10.10.13.69'
 INFLUXDB_PORT: int = 8086
 INFLUXDB_URL: str = f"{'https' if INFLUXDB_SSL else 'http'}://{INFLUXDB_HOST}:{INFLUXDB_PORT}"
-INFLUXDB_TOKEN: str = "my-token"
-INFLUXDB_ORG: str = "my-org"
+INFLUXDB_TOKEN: str = (
+    "ny9vODSDkg0VDZDE4J5DJ2Ul6MdSnlpZ70xbRLkqCF-w-b1skQj411CCIrCrnw9smnHWvD-vOfGSGLz4W8KGAA=="
+)
+INFLUXDB_ORG: str = "ProGeek"
+INFLUXDB_BUCKET: str = 'energyMonitoring'
 
 INFLUXDB_GZIP: bool = True
 INFLUXDB_TIMEOUT: int = 10_000

@@ -21,9 +21,7 @@ import sys
 
 
 def main():
-    """Run administrative tasks.
-
-    """
+    """Run administrative tasks."""
     os.environ.setdefault('ROUNDBOX_SETTINGS_MODULE', 'growatt_monitor.settings')
     try:
         from RoundBox.core.cliparser import exec_from_cli
