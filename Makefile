@@ -57,6 +57,7 @@ install: ## Install the poetry environment
 	@poetry install
 	@poetry shell
 
+.PHONY: format
 format: ## Format code using isort and black.
 	@echo "🚀 Formatting code: Running isort and black"
 	@isort .
@@ -68,10 +69,12 @@ lint: ## Check code formatting using isort and black.
 	@isort --check-only --diff $(APP_ROOT)
 	@black --check $(APP_ROOT)
 
+.PHONY: test
 test: ## Test the code with pytest
 	@echo "🚀 Testing code: Running pytest"
 	@pytest -s --doctest-modules tests
 
+.PHONY: bump-version
 bump-version: ## Bump the project version
 	@poetry version $(PROJECT_VERSION)
 
