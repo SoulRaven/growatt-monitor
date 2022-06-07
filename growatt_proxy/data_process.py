@@ -78,7 +78,9 @@ def process_data(data):
                 except:
                     # no valid record fall back on old processing?
                     if settings.DEBUG:
-                        log.debug("No matching record layout found, standard processing performed")
+                        log.debug(
+                            "No matching record layout found, standard processing performed"
+                        )
                     layout = "none"
                     novalidrec = True
             else:

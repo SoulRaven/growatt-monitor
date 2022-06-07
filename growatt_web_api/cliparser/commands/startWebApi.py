@@ -47,19 +47,35 @@ class Command(BaseCommand):
         parser.add_argument("args", metavar="start_web_api", nargs="*")
 
         parser.add_argument(
-            "--username", action="store", dest="username", type=str, help="Growatt OSS username"
+            "--username",
+            action="store",
+            dest="username",
+            type=str,
+            help="Growatt OSS username",
         )
 
         parser.add_argument(
-            "--password", action="store", dest="password", type=str, help="Growatt OSS password"
+            "--password",
+            action="store",
+            dest="password",
+            type=str,
+            help="Growatt OSS password",
         )
 
         parser.add_argument(
-            "--server", action="store", dest="server", type=str, help="Growatt endpoint web api"
+            "--server",
+            action="store",
+            dest="server",
+            type=str,
+            help="Growatt endpoint web api",
         )
 
         parser.add_argument(
-            "--plantId", action="store", dest="plantId", type=int, help="Growatt plant ID"
+            "--plantId",
+            action="store",
+            dest="plantId",
+            type=int,
+            help="Growatt plant ID",
         )
 
         parser.add_argument(
@@ -91,10 +107,16 @@ class Command(BaseCommand):
         :return:
         """
 
-        self.username = options.get('username') or getattr(app_settings, 'GROWATT_USERNAME')
-        self.password = options.get('password') or getattr(app_settings, 'GROWATT_PASSWORD')
+        self.username = options.get('username') or getattr(
+            app_settings, 'GROWATT_USERNAME'
+        )
+        self.password = options.get('password') or getattr(
+            app_settings, 'GROWATT_PASSWORD'
+        )
 
-        self.server = options.get('server', getattr(app_settings, 'GROWATT_DEFAULT_URL'))
+        self.server = options.get(
+            'server', getattr(app_settings, 'GROWATT_DEFAULT_URL')
+        )
 
         self.schedule_delay = options.get(
             'schedule_delay', getattr(app_settings, 'SCHEDULE_DELAY_TASKS')

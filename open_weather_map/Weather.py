@@ -61,7 +61,10 @@ class OpenWeatherMap:
             status = w.detailed_status
             self.temperature = w.temperature('celsius')['temp']
             self.cloud_pct = w.clouds
-            self.cmo_str = '%s with cloud coverage of %s percent' % (status, self.cloud_pct)
+            self.cmo_str = '%s with cloud coverage of %s percent' % (
+                status,
+                self.cloud_pct,
+            )
             self.fresh = True
         except Exception as e:
             log.error('Getting weather: {}'.format(e))

@@ -7,13 +7,19 @@ copyright: Maintained by <a href="https://progeek.ro">SoulRaven</a>.
 site_dir: "site"
 edit_uri: ""
 
+watch:
+  - README.md
+
 nav:
-  - Home:
-    - Overview: index.md
-    - Changelog: changelog.md
-    - Credits: credits.md
-    - License: license.md
-    - Libraries: libraries.md
+  - Home: index.md
+  - Releases:
+      - releases/index.md
+      - 1.0: releases/1.0.md
+  - Resources: resources.md
+  - About:
+      - Credits: credits.md
+      - Libraries: libraries.md
+      - License: license.md
 #  - Code Reference: reference/
 #  - Dev:
 #    - Coverage report: coverage.md
@@ -26,14 +32,28 @@ plugins:
       scripts:
       - docs/gen_credits.py
       - docs/gen_ref_nav.py
+  #- autolinks
+  - awesome-pages
+  - pagenav-generator
+  - tags
   - literate-nav:
       nav_file: SUMMARY.md
 
 theme:
   name: material
-  feature:
+  custom_dir: docs/overrides
+  features:
+    - navigation.instant
+    - navigation.tracking
     - navigation.tabs
+    - navigation.tabs.sticky
+    #- navigation.sections
+    - navigation.indexes
     - navigation.top
+    - toc.integrate
+    - content.code.annotate
+  icon:
+    repo: fontawesome/brands/github
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
@@ -45,12 +65,14 @@ theme:
       toggle:
         icon: material/brightness-7
         name: Switch to light mode
-  features:
-    - navigation.tabs
 
 extra_css:
 - css/material.css
 - css/mkdocstrings.css
+
+extra_javascript:
+  - https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js
+  - js/tablesort.js
 
 extra:
   generator: true
@@ -62,16 +84,33 @@ extra:
 
 markdown_extensions:
   - admonition
+  - sane_lists
+  - def_list
+  - attr_list
+  - md_in_html
+  - meta
+  - tables
+  - pymdownx.critic
+  - pymdownx.caret
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.tilde
+  - pymdownx.details
+  - pymdownx.superfences
   - pymdownx.emoji
   - pymdownx.magiclink
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
   - pymdownx.snippets:
       check_paths: true
-  - pymdownx.superfences
   - pymdownx.tabbed
-  - pymdownx.tasklist
-  - toc:
-      permalink: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.saneheaders
+#  - toc:
+#      permalink: true
+#      toc_depth: 1
   - pymdownx.arithmatex:
       generic: true
-  - pymdownx.snippets:
 

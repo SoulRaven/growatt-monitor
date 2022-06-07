@@ -1,0 +1,3798 @@
+openapi: 3.0.0
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/ProGeek/Growatt_Web_API/1.0.0
+  - description: Growatt API WEB server
+    url: https://server-api.growatt.com
+info:
+  version: "1.0.0"
+  title: Growatt Web API
+  description: |-
+    This is a reverse engineering of the Growatt API from iOS application.
+
+    _Reverse date 03.02.2022 application version is: 5.82_
+  contact:
+    name: Zaharia Constantin
+    email: constantin.zaharia@progeek.ro
+  license:
+    url: https://choosealicense.com/licenses/gpl-3.0/
+    name: GPLv3
+paths:
+  /newTwoLoginAPI.do:
+    post:
+      tags:
+        - Login
+      operationId: Login
+      summary: Login form for login the user on Growatt OSS
+      description: On success login the server will reply with a specific JSON schema with user account information
+      responses:
+        '200':
+          description: successfully on login operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LoginWebForm'
+    get:
+      tags:
+        - Login
+      operationId: Messagers
+      summary: After the login check if any message from the backend
+      description: Messages from the backend server
+      parameters:
+        - in: query
+          name: op
+          required: true
+          schema:
+            type: string
+            enum:
+              - getServerMessage
+            maxLength: 16
+        - in: query
+          name: accountName
+          required: true
+          schema:
+            type: string
+            default:
+            maxLength: 30
+      responses:
+        '200':
+          description: On success return an object with spcific backend notifications or messages
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/anyValue'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/anyValue'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/anyValue'
+  /newLoginAPI.do:
+    post:
+      tags:
+        - Login
+      operationId: Get Session password
+      summary: Posibily to get the session password used to modify some parameters
+      description: ''
+      parameters:
+        - in: query
+          name: op
+          required: true
+          schema:
+            type: string
+            enum:
+              - getSetPass
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/getSetPassWebForm'
+            examples:
+              example:
+                description: 'abc'
+                value:
+                  stringDate: ''
+      responses:
+        '200':
+          description: On success return JSON object with the session password and what elements are avalibile for change
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getSetPassResponse'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/anyValue'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/anyValue'
+  /newPlantAPI.do:
+    post:
+      tags:
+        - PlantDetails
+      operationId: newPlantAPI_POST
+      summary: ''
+      description: ''
+      parameters:
+        - in: query
+          name: action
+          required: true
+          schema:
+            type: string
+            enum: [
+              getUserCenterEnertyDataTwo,
+              getAPPWeattherTwo
+            ]
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/getUserCenterEnertyDataTwoWebForm'
+                - $ref: '#/components/schemas/getAPPWeatherTwoWebForm'
+            examples:
+              getAPPWeatherTwo:
+                summary: Return the weather from the plant location
+                value:
+                  language: 1
+              getUserCenterEnertyData:
+                summary: Return the plant energy data
+                value:
+                  language: en
+
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/getUserCenterEnertyDataTwoResponse'
+                  - $ref: '#/components/schemas/getAPPWeatherTwoResponse'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/anyValue'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/anyValue'
+  /newTwoPlantAPI.do:
+    post:
+      tags:
+        - PlantDetails
+      operationId: getUserCentralEntryDataByPlantId
+      summary: Return an object with plant details
+      description: ''
+      parameters:
+        - in: query
+          name: op
+          required: true
+          schema:
+            type: string
+            enum: [getUserCenterEnertyDataByPlantid]
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/getUserCentralEntryDataByPlantIdWebForm'
+            example:
+              getUserCenterEnertyDataByPlantid:
+                value:
+                  language: 1
+                  plantId: 64782
+      responses:
+        '200':
+          description: 'Get the plant information using the plantId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getUserCentralEntryDataByPlantIdResponse'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/anyValue'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/anyValue'
+    get:
+      tags:
+        - PlantDetails
+      operationId: getAllDeviceList
+      parameters:
+        - in: query
+          name: op
+          required: true
+          schema:
+            type: string
+            enum: [getAllDeviceList]
+        - in: query
+          name: language
+          required: true
+          schema:
+            type: integer
+            default: 1
+        - in: query
+          name: plantId
+          required: true
+          schema:
+            type: string
+            default: ABC134ABGC
+      responses:
+        '200':
+          description: ''
+          content:
+            aplication/json:
+              schema:
+                $ref: '#/components/schemas/getallDeviceListResponse'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/anyValue'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/anyValue'
+  /newStorageAPI.do:
+    post:
+      tags:
+        - StorageAPI
+      operationId: newStorageAPI_POST
+      summary: ''
+      description: ''
+      parameters:
+        - in: query
+          name: op
+          required: true
+          schema:
+            type: string
+            enum: [
+              getSystemStatusData_sacolar,
+              getEnergyOverviewData_sacolar,
+              getEnergyProdAndConsData_sacolar,
+              getStorageEnergyData_sacolar
+            ]
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/getEnergyOverviewData_sacolarWebForm'
+            examples:
+              getSystemStatusData_sacolar:
+                value:
+                  plantId: 64782
+                  storageSn: RNK5HGV01D
+              getEnergyOverviewData_sacolar:
+                value:
+                  plantId: 64782
+                  storageSn: RNK5HGV01D
+              getEnergyProdAndConsData_sacolar:
+                value:
+                  plantId: 64782
+                  storageSn: RNK5HGV01D
+                  date: "2022-03-26"
+                  type: 0
+              getStorageEnergyData_sacolar:
+                value:
+                  plantId: 64782
+                  storageSn: RNK5HGV01D
+                  date: "2022-03-26"
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: '#/components/schemas/getSystemStatusData_sacolarResponse'
+                  - $ref: '#/components/schemas/getEnergyOverviewData_sacolarResponse'
+                  - $ref: '#/components/schemas/getEnergyProdAndConsData_sacolarResponse'
+                  - $ref: '#/components/schemas/getStorageEnergyData_sacolarResponse'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/anyValue'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/anyValue'
+    get:
+      tags:
+        - StorageAPI
+      operationId: newStorageAPI_GET
+      summary: ''
+      description: ''
+      parameters:
+        - in: query
+          name: op
+          required: true
+          schema:
+            type: string
+            enum: [
+              getStorageParams_sacolar,
+              getStorageInfo_sacolar,
+              getStorageSetData,
+              getDayLineStorage_sacolar,
+              getMonthLineStorage_sacolar,
+              getYearLineStorage_sacolar,
+              getTotalLineStorage_sacolar
+            ]
+        - in: query
+          name: storageId
+          schema:
+            type: string
+            example: ABC134ABGC
+          allowEmptyValue: true
+          description: 'This field must contain the inverters serial number. #used in getStorageParams, getStorageInfo'
+        - in: query
+          name: id
+          schema:
+            type: string
+            default: 'ABC134ABGC'
+            example: 'ABC134ABGC'
+          allowEmptyValue: true
+          description: 'This field must contain the inverters serial number. @todo: document this parameter. #used in getDayLineStorage, getMonthLineStorage, getDayYearLineStorage'
+        - in: query
+          name: kind
+          schema:
+            type: integer
+            default: 0
+            example: 0
+          allowEmptyValue: true
+          description: '@todo: document this parameter. #used in getDayLineStorage, getMonthLineStorage, getDayYearLineStorage'
+        - in: query
+          name: type
+          schema:
+            type: integer
+            enum: [
+              1, # EpvMonth or PVEpvYear or EpvTotal
+              2, # eBatChargeMonth or eBatChargeyear
+              3, # PV1 Voltage or eBatDisChargeMonth
+              4, # EacChargeMonth
+              8, # PPV1 W
+              9, # PPV2 Voltage
+              10, # PPV2 W
+
+            ]
+          description: >
+            reprezentation of the query types:
+              * ----------- getTotalLineStorage_sacolar ------------
+              * `1` - EpvTotal Energy(Kwh)
+              * `2` - eBatChargeTotal Energy(Kwh)
+              * `3` - eBatDisChargeTotal Energy(Kwh)
+              * `4` - EacChargeTotal Energy(Kwh)
+              * ----------- getYearLineStorage_sacolar ------------
+              * `1` - PVEpvYear Energy(Kwh)
+              * `2` - eBatChargeYear Energy(Kwh)
+              * `3` - eBatDisChargeYear Energy(Kwh)
+              * `4` - EacChargeYear Energy(Kwh)
+              * ----------- getMonthLineStorage_sacolar -----------
+              * `1` - EpvMonth Energy(Kwh)
+              * `2` - eBatChargeMonth Energy(Kwh)
+              * `3` - eBatDisChargeMonth Energy(Kwh)
+              * `4` - EacChargeMonth Energy(Kwh)
+              * ----------- getDayLineStorage_sacolar -----------
+              * `3` - PV1 Voltage (Voltage)
+              * `8` - PPV1 Wats Power (W)
+              * `9` - PV2 Voltage (Voltage)
+              * `10` - PPV Wats Power (W)
+
+        - in: query
+          name: date
+          schema:
+            type: string
+            default: '2022-03-06'
+            example: '2022-03-06'
+          allowEmptyValue: true
+          description: '@todo: document this parameter. #used in getDayLineStorage (full date), getMonthLineStorage (only year-month), getDayYearLineStorage (only year)'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                oneOf:
+                  - $ref: '#/components/schemas/getStorageParams_sacolarResponse'
+                  - $ref: '#/components/schemas/getStorageInfo_sacolarResponse'
+                  - $ref: '#/components/schemas/getStorageSetDataResponse'
+                  - $ref: '#/components/schemas/getDayLineStorage_sacolarResponse'
+                  - $ref: '#/components/schemas/getDayMonthLineStorage_sacolarResponse'
+                  - $ref: '#/components/schemas/getDayYearLineStorage_sacolarResponse'
+                  - $ref: '#/components/schemas/getTotalLineStorage_sacolarResponse'
+        '401':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/anyValue'
+        '403':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/anyValue'
+components:
+  securitySchemes:
+    ApiKeyAuth:         # arbitrary name for the security scheme; will be used in the "security" key later
+      type: apiKey
+      in: cookie
+      name: JSESSIONID # cookie name
+  schemas:
+    anyValue:
+      description: The uri can return any schema, not well documented
+      anyOf:
+        - type: string
+        - type: array
+          items: {}
+        - type: object
+    getSetPassResponse:
+      description: ''
+      type: object
+      properties:
+        result:
+          type: number
+          example: 1
+        msg:
+          description: This is the password used to modify from the application or web, diferent parameters of the inverters. The format is year-month-day YYYYMMDD on the moment you want to modify
+          type: string
+          example: growatt20220306
+        obj:
+          type: object
+          properties:
+            enable:
+              type: object
+              properties:
+                storage_spf5000_overtemp_restart:
+                  type: string
+                  example: 1
+                storage_spf5000_ac_discharge_frequency:
+                  type: string
+                  example: 1
+                storage_spf5000_charge_source:
+                  type: string
+                  example: 1
+                storage_spf5000_folat_charge_voltage:
+                  type: string
+                  example: 1
+                storage_spf5000_max_charge_current:
+                  type: string
+                  example: 1
+                storage_spf5000_buzzer:
+                  type: string
+                  example: 1
+                storage_spf5000_system_time:
+                  type: string
+                  example: 1
+                storage_spf5000_bulk_charge_voltage:
+                  type: string
+                  example: 1
+                storage_spf5000_ac_input_model:
+                  type: string
+                  example: 1
+                storage_spf5000_ac_discharge_voltage:
+                  type: string
+                  example: 1
+                storage_spf5000_max_AC_charge_current:
+                  type: string
+                  example: 1
+                storage_spf5000_uti_charge:
+                  type: string
+                  example: 1
+                storage_spf5000_batter_low_voltage:
+                  type: string
+                  example: 1
+                storage_spf5000_pv_input_model:
+                  type: string
+                  example: 1
+                storage_spf5000_overlad_restart:
+                  type: string
+                  example: 1
+                storage_spf5000_battery_type:
+                  type: string
+                  example: 1
+                storage_spf5000_uti_output:
+                  type: string
+                  example: 1
+                storage_spf5000_ac_output_source:
+                  type: string
+                  example: 1
+                storage_spf5000_ac_is_output:
+                  type: string
+                  example: 1
+            switch:
+              type: boolean
+    getSetPassWebForm:
+      type: object
+      additionalProperties: false
+      properties:
+        stringTime:
+          type: string
+          format: date
+          example: '2022-03-06'
+          maxLength: 10
+          pattern: ^([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))$
+        type:
+          description: This value allows you to define the specific Growatt hardware, in my case 22 are storage inverters, or offline inverters.
+          type: integer
+          default: 22
+          example: 22
+          enum:
+            - 22
+      required:
+       - stringTime
+       - type
+    getUserCenterEnertyDataTwoResponse:
+      description: ''
+      type: object
+      additionalProperties: false
+      properties:
+        plantNumber:
+          type: number
+          example: 1
+        todayProfitStr:
+          type: string
+          example: $0
+        isHaveFormulaMoney:
+          type: boolean
+        nominalPowerStr:
+          type: string
+          example: 5.6kWp
+        eventMessBeanList:
+          type: array
+          items: {}
+        todayValue:
+          type: string
+          example: 0.9
+        formulaCo2Str:
+          type: string
+          example: 186.1kg
+        powerValue:
+          type: string
+          example: 557.0
+        monthValue:
+          type: string
+          example: 32.0
+        powerValueStr:
+          type: string
+          example: 0.6kW
+        todayStr:
+          type: string
+          example: 0.9kWh
+        monthStr:
+          type: string
+          example: 32kWh
+        alarmValue:
+          type: number
+          example: 0
+        totalProfitStr:
+          type: string
+          example: $0
+        yearStr:
+          type: string
+          example: 0kWh
+        deviceDetail:
+          type: object
+          properties: {}
+        treeValue:
+          type: string
+          example: 10.3
+        monthProfitStr:
+          type: string
+          example: $0
+        treeStr:
+          type: string
+          example: 10
+        formulaCo2Vlue:
+          type: string
+          example: 186.1
+        yearValue:
+          type: string
+          example: 0.0
+        totalStr:
+          type: string
+          example: 186.7kWh
+        deviceTypeMap:
+          type: object
+          properties:
+            STORAGE:
+              type: number
+              example: 0
+            TLXH:
+              type: number
+              example: 0
+            MIX:
+              type: number
+              example: 0
+            SPA:
+              type: number
+              example: 0
+        plantType:
+          type: number
+          example: 4
+        todayUnit:
+          type: string
+          example: kWh
+        totalValue:
+          type: string
+          example: 186.7
+        statusMap:
+          type: object
+          properties:
+            faultNum:
+              type: number
+              example: 0
+            onlineNum:
+              type: number
+              example: 2
+            offline:
+              type: number
+              example: 0
+        nominalPowerValue:
+          type: number
+          example: 5600
+        formulaCoalStr:
+          type: string
+          example: 74.7kg
+        plantId:
+          type: number
+          example: 726415
+        formulaCoalValue:
+          type: string
+          example: 74.7
+        plantStatus:
+          type: number
+          example: 2
+    getUserCenterEnertyDataTwoWebForm:
+      type: object
+      additionalProperties: true
+      properties:
+        language:
+          description: Select the lannguage, 1 possibile is english
+          type: integer
+          default: 1
+          enum: [1]
+      required:
+        - language
+    getAPPWeatherTwoResponse:
+      description: Return the weader condition from the plant location. Data is reruned by Growatt OSS, i don\'t know the source of the data
+      type: object
+      additionalProperties: false
+      properties:
+        result:
+          type: number
+          example: 1
+        obj:
+          type: object
+          properties:
+            radiant:
+              type: string
+              example:
+            dataStr:
+              type: string
+              example: HeWeather6:[]
+            data:
+              type: object
+              properties:
+                HeWeather6:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      update:
+                        type: object
+                        properties:
+                          utc:
+                            type: string
+                            example: 2022-03-05 12:46
+                          loc:
+                            type: string
+                            example: 2022-03-05 14:46
+                      now:
+                        type: object
+                        properties:
+                          cond_code:
+                            type: string
+                            example: 101
+                          cond_txt:
+                            type: string
+                            example: Cloudy
+                          hum:
+                            type: string
+                            example: 49
+                          fl:
+                            type: string
+                            example: 2
+                          pcpn:
+                            type: string
+                            example: 0.0
+                          wind_spd:
+                            type: string
+                            example: 19
+                          newTmp:
+                            type: string
+                            example: 7.0°C
+                          cloud:
+                            type: string
+                            example: 76
+                          tmp:
+                            type: string
+                            example: 7
+                          wind_dir:
+                            type: string
+                            example: NE
+                          wind_sc:
+                            type: string
+                            example: 3
+                          wind_deg:
+                            type: string
+                            example: 68
+                          pres:
+                            type: string
+                            example: 1017
+                          vis:
+                            type: string
+                            example: 16
+                      status:
+                        type: string
+                        example: ok
+                      basic:
+                        type: object
+                        properties:
+                          admin_area:
+                            type: string
+                            example: Plant country
+                          lon:
+                            type: string
+                            example: 23.23
+                          parent_city:
+                            type: string
+                            example: plant location
+                          tz:
+                            type: string
+                            example: +2.00
+                          toDay:
+                            type: string
+                            format: date
+                            example: 2022-03-05
+                          location:
+                            type: string
+                            example: plant location
+                          sr:
+                            type: string
+                            example: 06:56
+                          cnty:
+                            type: string
+                            example: plant country
+                          ss:
+                            type: string
+                            example: 18:17
+                          cid:
+                            type: string
+                            example: 123456
+                          lat:
+                            type: string
+                            example: 23.23
+            city:
+              type: string
+              example: Coșoveni
+            week:
+              type: string
+              example: Saturday
+        msg:
+          type: string
+          example:
+    getAPPWeatherTwoWebForm:
+      type: object
+      additionalProperties: true
+      properties:
+        language:
+          description: Select the lannguage, default english
+          type: string
+          default: en
+          enum: [en]
+      required:
+        - language
+    getStorageParams_sacolarResponse:
+      description: Get information about specifed inverter in the query.
+      type: object
+      additionalProperties: false
+      properties:
+        storageDetailBean:
+          type: object
+          properties:
+            eDischargeToday:
+              type: number
+              example: 0
+            cell2Voltage10:
+              type: number
+              example: 0
+            bmsSoh:
+              type: number
+              example: 0
+            cell2Voltage12:
+              type: number
+              example: 0
+            cell2Voltage11:
+              type: number
+              example: 0
+            chargeMonth:
+              type: number
+              example: 0
+            outPutCurrent:
+              type: number
+              example: 0.10000000149011612
+            temperature:
+              type: number
+              example: 0
+            time:
+              type: string
+              example: 2022-03-06 09:53:45
+            eDischargeTotal2:
+              type: number
+              example: 0
+            cell2Voltage13:
+              type: number
+              example: 0
+            cell2Voltage14:
+              type: number
+              example: 0
+            cell2Voltage15:
+              type: number
+              example: 0
+            cell2Voltage16:
+              type: number
+              example: 0
+            pCharge2:
+              type: number
+              example: 0
+            freqOutPut:
+              type: number
+              example: 0
+            pDischarge:
+              type: number
+              example: 0
+            cellVoltage16:
+              type: number
+              example: 0
+            cellVoltage15:
+              type: number
+              example: 0
+            bmsCurrent:
+              type: number
+              example: 0
+            cycleCount:
+              type: number
+              example: 0
+            maxChargeOrDischargeCurrent:
+              type: number
+              example: 0
+            buck2_NTCTemperature:
+              type: number
+              example: 0
+            vGrid:
+              type: number
+              example: 243.10000610351562
+            ppv:
+              type: number
+              example: 266
+            bmsCellVoltage10:
+              type: number
+              example: 0
+            iacToUserText:
+              type: string
+              example: 0.0 A
+            iacToGrid:
+              type: number
+              example: 0
+            bmsCellVoltage14:
+              type: number
+              example: 0
+            bmsCellVoltage13:
+              type: number
+              example: 0
+            bmsCellVoltage12:
+              type: number
+              example: 0
+            vpv2:
+              type: number
+              example: 0
+            bmsCellVoltage11:
+              type: number
+              example: 0
+            eChargeToday:
+              type: number
+              example: 0.5
+            bmsCellVoltage16:
+              type: number
+              example: 0
+            bmsCellVoltage15:
+              type: number
+              example: 0
+            eToUserToday:
+              type: number
+              example: 0
+            vpvText:
+              type: string
+              example: 317.6 V
+            innerCWCode:
+              type: string
+              example: null
+            iChargePV2:
+              type: number
+              example: 0
+            iChargePV1:
+              type: number
+              example: 5.199999809265137
+            pacToUser:
+              type: number
+              example: 0
+            deviceType:
+              type: number
+              example: 0
+            cellVoltage11:
+              type: number
+              example: 0
+            eDischargeTotal:
+              type: number
+              example: 1
+            cellVoltage12:
+              type: number
+              example: 0
+            cellVoltage13:
+              type: number
+              example: 0
+            cellVoltage14:
+              type: number
+              example: 0
+            dischargeToStandbyReason:
+              type: number
+              example: 0
+            cellVoltage10:
+              type: number
+              example: 0
+            remoteCntlFailReason:
+              type: number
+              example: 0
+            chargeMonthText:
+              type: string
+              example: 0
+            cell2Voltage1:
+              type: number
+              example: 0
+            etotal:
+              type: number
+              example: -0.20000000000000284
+            cell2Voltage2:
+              type: number
+              example: 0
+            cell2Voltage3:
+              type: number
+              example: 0
+            cell2Voltage4:
+              type: number
+              example: 0
+            cell2Voltage5:
+              type: number
+              example: 0
+            eChargeTodayText:
+              type: string
+              example: 0.5 kWh
+            iacToUser:
+              type: number
+              example: 0
+            cell2Voltage6:
+              type: number
+              example: 0
+            cell2Voltage7:
+              type: number
+              example: 0
+            cell2Voltage8:
+              type: number
+              example: 0
+            cell2Voltage9:
+              type: number
+              example: 0
+            pCharge:
+              type: number
+              example: 275
+            outPutVolt:
+              type: number
+              example: 0
+            dischargeMapMap:
+              type: object
+              properties: {}
+            constantVolt:
+              type: number
+              example: 0
+            eToGridTotal:
+              type: number
+              example: 0
+            chargeWay:
+              type: number
+              example: 0
+            vBus:
+              type: number
+              example: 0
+            ipv:
+              type: number
+              example: 0
+            constantVolt2:
+              type: number
+              example: 0
+            vBatText:
+              type: string
+              example: 51.1 V
+            dischargeToStandbyReasonText:
+              type: string
+              example: Unknown
+            eDischargeTotalText:
+              type: string
+              example: 1.0 kWh
+            dischargeMonthText:
+              type: string
+              example: 0
+            epvToday2:
+              type: number
+              example: 0
+            serialNum:
+              type: string
+              example: RKG5BEL098
+            dayMap:
+              type: string
+              format: nullable
+            iAcCharge:
+              type: number
+              example: 0
+            pacToGridText:
+              type: string
+              example: 0.0 W
+            etoday:
+              type: number
+              example: 0
+            bmsTemperature2:
+              type: number
+              example: 0
+            chargeToStandbyReasonText:
+              type: string
+              example: Unknown
+            chgCurr:
+              type: number
+              example: 5.400000095367432
+            day:
+              type: string
+              example:
+            faultCode:
+              type: number
+              example: 0
+            gaugeICCurrent:
+              type: number
+              example: 0
+            bmsWarnInfo:
+              type: number
+              example: 0
+            buck1_NTCTemperature:
+              type: number
+              example: 0
+            bmsCurrent2:
+              type: number
+              example: 0
+            withTime:
+              type: boolean
+            ppvText:
+              type: string
+              example: 266.0 W
+            iCharge:
+              type: number
+              example: 0
+            calendar:
+              type: object
+              properties:
+                minimalDaysInFirstWeek:
+                  type: number
+                  example: 1
+                weekYear:
+                  type: number
+                  example: 2022
+                time:
+                  type: object
+                  properties:
+                    time:
+                      type: number
+                      example: 1646531625000
+                    minutes:
+                      type: number
+                      example: 53
+                    seconds:
+                      type: number
+                      example: 45
+                    hours:
+                      type: number
+                      example: 9
+                    month:
+                      type: number
+                      example: 2
+                    year:
+                      type: number
+                      example: 122
+                    timezoneOffset:
+                      type: number
+                      example: -480
+                    day:
+                      type: number
+                      example: 0
+                    date:
+                      type: number
+                      example: 6
+                weeksInWeekYear:
+                  type: number
+                  example: 53
+                gregorianChange:
+                  type: object
+                  properties:
+                    time:
+                      type: number
+                      example: -12219292800000
+                    minutes:
+                      type: number
+                      example: 0
+                    seconds:
+                      type: number
+                      example: 0
+                    hours:
+                      type: number
+                      example: 8
+                    month:
+                      type: number
+                      example: 9
+                    year:
+                      type: number
+                      example: -318
+                    timezoneOffset:
+                      type: number
+                      example: -480
+                    day:
+                      type: number
+                      example: 5
+                    date:
+                      type: number
+                      example: 15
+                timeZone:
+                  type: object
+                  properties:
+                    lastRuleInstance:
+                      type: string
+                      format: nullable
+                    rawOffset:
+                      type: number
+                      example: 28800000
+                    DSTSavings:
+                      type: number
+                      example: 0
+                    dirty:
+                      type: boolean
+                    ID:
+                      type: string
+                      example: Asia/Shanghai
+                    displayName:
+                      type: string
+                      example: 中国标准时间
+                timeInMillis:
+                  type: number
+                  example: 1646531625000
+                lenient:
+                  type: boolean
+                firstDayOfWeek:
+                  type: number
+                  example: 1
+                weekDateSupported:
+                  type: boolean
+            warnCode2:
+              type: number
+              example: 0
+            vBuck:
+              type: number
+              example: 0
+            eToGridToday:
+              type: number
+              example: 0
+            vac:
+              type: number
+              example: 0
+            powSavingEn:
+              type: number
+              example: 0
+            vBuckText:
+              type: string
+              example: 0.0 V
+            bLightEn:
+              type: number
+              example: 0
+            gaugeRM1:
+              type: number
+              example: 0
+            gaugeRM2:
+              type: number
+              example: 0
+            eacChargeTotal:
+              type: number
+              example: 1.2
+            eacDisChargeTotal:
+              type: number
+              example: 0
+            epvToday:
+              type: number
+              example: 0.5
+            errorText:
+              type: string
+              example: Unknown
+            eChargeToday2:
+              type: number
+              example: 0
+            gaugePackStatus:
+              type: number
+              example: 0
+            warnInfo2:
+              type: number
+              example: 0
+            pDischarge2:
+              type: number
+              example: 0
+            chargeToStandbyReason:
+              type: number
+              example: 0
+            again:
+              type: boolean
+            ipmTemperature:
+              type: number
+              example: 0
+            uwBatType2:
+              type: number
+              example: 0
+            pacToUserText:
+              type: string
+              example: 0.0 W
+            soh:
+              type: number
+              example: 0
+            bmsCellVoltage1:
+              type: number
+              example: 0
+            remoteCntlEn:
+              type: number
+              example: 0
+            bmsCellVoltage3:
+              type: number
+              example: 0
+            bmsCellVoltage2:
+              type: number
+              example: 0
+            eopDischrTotal:
+              type: number
+              example: 1.1
+            bmsCellVoltage6:
+              type: number
+              example: 0
+            bmsCellVoltage7:
+              type: number
+              example: 0
+            bmsCellVoltage4:
+              type: number
+              example: 0
+            bmsCellVoltage5:
+              type: number
+              example: 0
+            bmsCellVoltage8:
+              type: number
+              example: 0
+            eDischargeTodayText:
+              type: string
+              example: 0.0 kWh
+            bmsCellVoltage9:
+              type: number
+              example: 0
+            gaugeBattteryStatus:
+              type: number
+              example: 0
+            normalPower:
+              type: number
+              example: 0
+            iDischarge:
+              type: number
+              example: 0
+            rateVA:
+              type: number
+              example: 0
+            capacity:
+              type: number
+              example: 57
+            manualStartEn:
+              type: number
+              example: 0
+            eacChargeToday:
+              type: number
+              example: 0
+            ipvText:
+              type: string
+              example: 0.0 A
+            dataLogSn:
+              type: string
+              example:
+            bmsError:
+              type: number
+              example: 0
+            epvTotal:
+              type: number
+              example: 56.7
+            pacToGrid:
+              type: number
+              example: 0
+            eopDischrToday:
+              type: number
+              example: 0
+            pAcInPut:
+              type: number
+              example: 0
+            eChargeTotal2:
+              type: number
+              example: 0
+            batTemp:
+              type: number
+              example: 0
+            bmsStatus:
+              type: number
+              example: 0
+            warnInfo:
+              type: number
+              example: 0
+            iChargeText:
+              type: string
+              example: 0.0 A
+            deltaVolt:
+              type: number
+              example: 0
+            pDischargeText:
+              type: string
+              example: 0.0 W
+            disChargeMonth:
+              type: number
+              example: 0
+            vacText:
+              type: string
+              example: 0.0 V
+            errorCode:
+              type: number
+              example: 0
+            maxChargeOrDischargeCurrent2:
+              type: number
+              example: 0
+            rateWatt:
+              type: number
+              example: 0
+            cellVoltage1:
+              type: number
+              example: 0
+            eChargeTotal:
+              type: number
+              example: 57.900000000000006
+            cellVoltage3:
+              type: number
+              example: 0
+            cellVoltage2:
+              type: number
+              example: 0
+            bmsTemperature:
+              type: number
+              example: 0
+            cellVoltage9:
+              type: number
+              example: 0
+            cellVoltage8:
+              type: number
+              example: 0
+            cellVoltage5:
+              type: number
+              example: 0
+            eToUserTotal:
+              type: number
+              example: 0
+            cellVoltage4:
+              type: number
+              example: 0
+            cellVoltage7:
+              type: number
+              example: 0
+            pBat:
+              type: number
+              example: -275
+            cellVoltage6:
+              type: number
+              example: 0
+            warnCode:
+              type: number
+              example: 0
+            iDischargeText:
+              type: string
+              example: 0.0 A
+            dcDcTemperature:
+              type: number
+              example: 0
+            gaugeOperationStatus:
+              type: number
+              example: 0
+            eBatDisChargeToday:
+              type: number
+              example: 0
+            bmsDeltaVolt:
+              type: number
+              example: 0
+            bmsError2:
+              type: number
+              example: 0
+            gauge2RM2:
+              type: number
+              example: 0
+            gauge2RM1:
+              type: number
+              example: 0
+            vBuck2:
+              type: number
+              example: 0
+            sysOut:
+              type: number
+              example: -9
+            status:
+              type: number
+              example: 5
+            chargeDayMap:
+              type: object
+              properties: {}
+            storageBean:
+              type: string
+              format: nullable
+            loadPercent:
+              type: number
+              example: 0
+            pAcCharge:
+              type: number
+              example: 0
+            epvTotal2:
+              type: number
+              example: 0
+            pChargeText:
+              type: string
+              example: 275.0 W
+            eDischargeToday2:
+              type: number
+              example: 0
+            freqGrid:
+              type: number
+              example: 49.970001220703125
+            lost:
+              type: boolean
+            outPutPower:
+              type: number
+              example: 0
+            statusText:
+              type: string
+              example: PV charge
+            eacDisChargeToday:
+              type: number
+              example: 0
+            eChargeTotalText:
+              type: string
+              example: 57.900000000000006 kWh
+            warnText:
+              type: string
+              example: Unknown
+            vBat:
+              type: number
+              example: 51.099998474121094
+            deltaVolt2:
+              type: number
+              example: 0
+            cycleCount2:
+              type: number
+              example: 0
+            eBatDisChargeTotal:
+              type: number
+              example: 1
+            iacToGridText:
+              type: string
+              example: 0.0 A
+            soh2:
+              type: number
+              example: 0
+            alias:
+              type: string
+              example:
+            dischgCurr:
+              type: number
+              example: 0
+            bmsStatus2:
+              type: number
+              example: 0
+            invTemperature:
+              type: number
+              example: 0
+            bmsConstantVolt:
+              type: number
+              example: 0
+            address:
+              type: number
+              example: 0
+            capacityText:
+              type: string
+              example: 57 %
+            ppv2:
+              type: number
+              example: 0
+            vpv:
+              type: number
+              example: 317.6000061035156
+            sciLossChkEn:
+              type: number
+              example: 0
+        activePower:
+          type: number
+          example: 5000
+        storageType:
+          type: string
+          example: SPF 5000 ES
+        todayRevenue:
+          type: string
+          example: 0$
+        totalRevenue:
+          type: string
+          example: 0$
+        apparentPower:
+          type: number
+          example: 5000
+        storageBean:
+          type: object
+          properties:
+            utiOutStart:
+              type: number
+              example: 0
+            outputVoltType:
+              type: number
+              example: 0
+            fwVersion:
+              type: string
+              example: 040.04/041.04
+            overLoadRestart:
+              type: number
+              example: 0
+            bLightEn:
+              type: number
+              example: 0
+            utiOutEnd:
+              type: number
+              example: 0
+            location:
+              type: string
+              example:
+            treeID:
+              type: string
+              example: ST_RKG5BEL098
+            addr:
+              type: number
+              example: 1
+            pvModel:
+              type: number
+              example: 0
+            timezone:
+              type: number
+              example: 8
+            plantname:
+              type: string
+              example:
+            level:
+              type: number
+              example: 4
+            bulkChargeVolt:
+              type: number
+              example: 0
+            imgPath:
+              type: string
+              example: ./css/img/status_gray.gif
+            userName:
+              type: string
+              example:
+            liBatteryProtocolType:
+              type: number
+              example: 0
+            serialNum:
+              type: string
+              example: RKG5BEL098
+            pDischarge:
+              type: number
+              example: 0
+            portName:
+              type: string
+              example:
+            acInModel:
+              type: number
+              example: 0
+            batLowToUtiVolt:
+              type: number
+              example: 0
+            modelText:
+              type: string
+              example: A0B0D0T0P0U0M0S0
+            status:
+              type: number
+              example: 5
+            overTempRestart:
+              type: number
+              example: 0
+            ACmaxChargeCurr:
+              type: number
+              example: 0
+            sysTime:
+              type: string
+              example:
+            statusLed3:
+              type: boolean
+            uwBatType2:
+              type: number
+              example: 0
+            statusLed4:
+              type: boolean
+            record:
+              type: string
+              format: nullable
+            statusLed1:
+              type: boolean
+            statusLed2:
+              type: boolean
+            statusLed5:
+              type: boolean
+            plantId:
+              type: number
+              example: 0
+            statusLed6:
+              type: boolean
+            communicationVersion:
+              type: string
+              example:
+            chargeConfig:
+              type: number
+              example: 0
+            model:
+              type: number
+              example: 0
+            treeName:
+              type: string
+              example: RKG5BEL098
+            lost:
+              type: boolean
+            lastUpdateTime:
+              type: object
+              properties:
+                time:
+                  type: number
+                  example: 1646553227000
+                minutes:
+                  type: number
+                  example: 53
+                seconds:
+                  type: number
+                  example: 47
+                hours:
+                  type: number
+                  example: 15
+                month:
+                  type: number
+                  example: 2
+                year:
+                  type: number
+                  example: 122
+                timezoneOffset:
+                  type: number
+                  example: -480
+                day:
+                  type: number
+                  example: 0
+                date:
+                  type: number
+                  example: 6
+            children:
+              type: array
+              items: {}
+            statusText:
+              type: string
+              example: inverter.status.lost
+            updating:
+              type: boolean
+            outputFreqType:
+              type: number
+              example: 0
+            rateVA:
+              type: number
+              example: 5000
+            deviceType:
+              type: number
+              example: 3
+            manualStartEn:
+              type: number
+              example: 0
+            innerVersion:
+              type: string
+              example: null
+            dataLogSn:
+              type: string
+              example: DDD0BHP04P
+            utiChargeEnd:
+              type: number
+              example: 0
+            alias:
+              type: string
+              example: RKG5BEL098
+            batteryType:
+              type: number
+              example: 3
+            batteryUndervoltageCutoffPoint:
+              type: number
+              example: 0
+            maxChargeCurr:
+              type: number
+              example: 0
+            floatChargeVolt:
+              type: number
+              example: 0
+            utiChargeStart:
+              type: number
+              example: 0
+            tcpServerIp:
+              type: string
+              example: 8.209.89.62
+            buzzerEN:
+              type: number
+              example: 0
+            lastUpdateTimeText:
+              type: string
+              example: 2022-03-06 15:53:47
+            groupId:
+              type: number
+              example: -1
+            outputConfig:
+              type: number
+              example: 0
+            pCharge:
+              type: number
+              example: 0
+            parentID:
+              type: string
+              example: LIST_DDD0BHP04P_96
+            powSavingEn:
+              type: number
+              example: 0
+            mainsToBatteryOperatPoint:
+              type: number
+              example: 0
+            rateWatt:
+              type: number
+              example: 5000
+            sciLossChkEn:
+              type: number
+              example: 0
+    getStorageInfo_sacolarResponse:
+      description: Get information about battery from the specific inverter
+      type: object
+      additionalProperties: false
+      properties:
+        freqGrid:
+          description: Current frequency on grid network
+          type: string
+          example: 49.96
+        eBatDisChargeTotal:
+          type: string
+          example: 1
+        outPutPower:
+          description: Current ouput power delivered by the inverter
+          type: string
+          example: 0
+        vGrid:
+          description: Current voltage from the grid
+          type: string
+          example: 245.6
+        epvToday:
+          type: string
+          example: 0.5
+        loadPercent:
+          description: Current percent load that the inverter
+          type: string
+          example: 0
+        iChargePV2:
+          description: Actual current that is pulled from PV2
+          type: string
+          example: 0
+        iChargePV1:
+          description: Actual current that is pulled from PV1
+          type: string
+          example: 5.3
+        outPutVolt:
+          description: Current ouput voltage
+          type: string
+          example: 0
+        vpv1:
+          type: string
+          example: 323
+        activePower:
+          description: Active power (W)
+          type: string
+          example: 0
+        vpv2:
+          description: Current voltage on PV2
+          type: string
+          example: 0
+        eBatChargeToday:
+          description: Battery charged today
+          type: string
+          example: 0.5
+        apparentPower:
+          description: Apparent power (VA)
+          type: string
+          example: 0
+        pCharge2:
+          type: string
+          example: 0
+        capacity:
+          type: string
+          example: 57
+        pCharge1:
+          type: string
+          example: 276
+        eBatChargeTotal:
+          description: Total energy charged
+          type: string
+          example: 57.9
+        eBatDisChargeToday:
+          description: Total descharge today
+          type: string
+          example: 0
+        freqOutPut:
+          description: AC frequency on ouput
+          type: string
+          example: 0
+        epvTotal:
+          description: Total energy from PV
+          type: string
+          example: 56.7
+        vbat:
+          description: Battery voltage
+          type: string
+          example: 51.13
+        batSn:
+          description: Battery serial number
+          type: string
+          example:
+    getStorageSetDataResponse:
+      description: Get the minimum setting from the specified inverter
+      type: object
+      additionalProperties: false
+      properties:
+        result:
+          type: number
+          example: 1
+        obj:
+          type: object
+          properties:
+            storageSetBean:
+              type: object
+              properties:
+                storage_spf5000_bLightEn:
+                  type: string
+                  example: 1
+                storage_spf5000_overtemp_restart:
+                  type: string
+                  example: 1
+                storage_shangke_output_end_time_period:
+                  type: string
+                  example: 0
+                storage_spf5000_sciLossChkEn:
+                  type: string
+                  example: 0
+                storage_spf5000_ac_discharge_frequency:
+                  type: string
+                  example: 0
+                storage_spf5000_charge_source:
+                  type: string
+                  example: 2
+                storage_spf5000_folat_charge_voltage:
+                  type: string
+                  example: 53.2
+                storage_spf5000_max_charge_current:
+                  type: string
+                  example: 0
+                storage_spf5000_buzzer:
+                  type: string
+                  example: 1
+                storage_spf5000_manualStartEn:
+                  type: string
+                  example: 0
+                storage_sahngke_charging_start_time_period:
+                  type: string
+                  example: 0
+                storage_spf5000_bulk_charge_voltage:
+                  type: string
+                  example: 53.2
+                storage_spf5000_ac_input_model:
+                  type: string
+                  example: 1
+                storage_spf5000_ac_discharge_voltage:
+                  type: string
+                  example: 1
+                storage_sahngke_charging_end_time_period:
+                  type: string
+                  example: 0
+                storage_spf5000_max_AC_charge_current:
+                  type: string
+                  example: 0
+                storage_shangke_output_start_time_period:
+                  type: string
+                  example: 0
+                storage_sahngke_battery_undervoltage_cut_off_point:
+                  type: string
+                  example: 5.0
+                storage_sahngke_lithium_battery_protocol_type:
+                  type: string
+                  example: 52
+                storage_sahngke_mains_to_battery_operating_point:
+                  type: string
+                  example: 90.0
+                storage_spf5000_overlad_restart:
+                  type: string
+                  example: 1
+                storage_spf5000_battery_type:
+                  type: string
+                  example: 3
+                storage_spf5000_ac_output_source:
+                  type: string
+                  example: 1
+                storage_sahngke_battery_to_mains_working_point:
+                  type: string
+                  example: 80.0
+                msg:
+                  type: string
+                  example: ''
+    getDayLineStorage_sacolarResponse:
+        description: Return the storage percentage in 15 minutes window
+        type: object
+        additionalProperties: false
+        properties:
+          2022-03-06 00:00:
+            type: number
+            example: 0
+          2022-03-06 00:05:
+            type: number
+            example: 0
+          2022-03-06 00:10:
+            type: number
+            example: 0
+          2022-03-06 00:15:
+            type: number
+            example: 0
+          2022-03-06 00:20:
+            type: number
+            example: 0
+          2022-03-06 00:25:
+            type: number
+            example: 0
+          2022-03-06 00:30:
+            type: number
+            example: 0
+          2022-03-06 00:35:
+            type: number
+            example: 0
+          2022-03-06 00:40:
+            type: number
+            example: 0
+          2022-03-06 00:45:
+            type: number
+            example: 0
+          2022-03-06 00:50:
+            type: number
+            example: 0
+          2022-03-06 00:55:
+            type: number
+            example: 0
+          2022-03-06 01:00:
+            type: number
+            example: 0
+          2022-03-06 01:05:
+            type: number
+            example: 0
+          2022-03-06 01:10:
+            type: number
+            example: 0
+          2022-03-06 01:15:
+            type: number
+            example: 0
+          2022-03-06 01:20:
+            type: number
+            example: 0
+          2022-03-06 01:25:
+            type: number
+            example: 0
+          2022-03-06 01:30:
+            type: number
+            example: 0
+          2022-03-06 01:35:
+            type: number
+            example: 0
+          2022-03-06 01:40:
+            type: number
+            example: 0
+          2022-03-06 01:45:
+            type: number
+            example: 0
+          2022-03-06 01:50:
+            type: number
+            example: 0
+          2022-03-06 01:55:
+            type: number
+            example: 0
+          2022-03-06 02:00:
+            type: number
+            example: 0
+          2022-03-06 02:05:
+            type: number
+            example: 0
+          2022-03-06 02:10:
+            type: number
+            example: 0
+          2022-03-06 02:15:
+            type: number
+            example: 0
+          2022-03-06 02:20:
+            type: number
+            example: 0
+          2022-03-06 02:25:
+            type: number
+            example: 0
+          2022-03-06 02:30:
+            type: number
+            example: 0
+          2022-03-06 02:35:
+            type: number
+            example: 0
+          2022-03-06 02:40:
+            type: number
+            example: 0
+          2022-03-06 02:45:
+            type: number
+            example: 0
+          2022-03-06 02:50:
+            type: number
+            example: 0
+          2022-03-06 02:55:
+            type: number
+            example: 0
+          2022-03-06 03:00:
+            type: number
+            example: 0
+          2022-03-06 03:05:
+            type: number
+            example: 0
+          2022-03-06 03:10:
+            type: number
+            example: 0
+          2022-03-06 03:15:
+            type: number
+            example: 0
+          2022-03-06 03:20:
+            type: number
+            example: 0
+          2022-03-06 03:25:
+            type: number
+            example: 0
+          2022-03-06 03:30:
+            type: number
+            example: 0
+          2022-03-06 03:35:
+            type: number
+            example: 0
+          2022-03-06 03:40:
+            type: number
+            example: 0
+          2022-03-06 03:45:
+            type: number
+            example: 0
+          2022-03-06 03:50:
+            type: number
+            example: 0
+          2022-03-06 03:55:
+            type: number
+            example: 0
+          2022-03-06 04:00:
+            type: number
+            example: 0
+          2022-03-06 04:05:
+            type: number
+            example: 0
+          2022-03-06 04:10:
+            type: number
+            example: 0
+          2022-03-06 04:15:
+            type: number
+            example: 0
+          2022-03-06 04:20:
+            type: number
+            example: 0
+          2022-03-06 04:25:
+            type: number
+            example: 0
+          2022-03-06 04:30:
+            type: number
+            example: 0
+          2022-03-06 04:35:
+            type: number
+            example: 0
+          2022-03-06 04:40:
+            type: number
+            example: 0
+          2022-03-06 04:45:
+            type: number
+            example: 0
+          2022-03-06 04:50:
+            type: number
+            example: 0
+          2022-03-06 04:55:
+            type: number
+            example: 0
+          2022-03-06 05:00:
+            type: number
+            example: 0
+          2022-03-06 05:05:
+            type: number
+            example: 0
+          2022-03-06 05:10:
+            type: number
+            example: 0
+          2022-03-06 05:15:
+            type: number
+            example: 0
+          2022-03-06 05:20:
+            type: number
+            example: 0
+          2022-03-06 05:25:
+            type: number
+            example: 0
+          2022-03-06 05:30:
+            type: number
+            example: 0
+          2022-03-06 05:35:
+            type: number
+            example: 0
+          2022-03-06 05:40:
+            type: number
+            example: 0
+          2022-03-06 05:45:
+            type: number
+            example: 0
+          2022-03-06 05:50:
+            type: number
+            example: 0
+          2022-03-06 05:55:
+            type: number
+            example: 0
+          2022-03-06 06:00:
+            type: number
+            example: 0
+          2022-03-06 06:05:
+            type: number
+            example: 0
+          2022-03-06 06:10:
+            type: number
+            example: 0
+          2022-03-06 06:15:
+            type: number
+            example: 0
+          2022-03-06 06:20:
+            type: number
+            example: 0
+          2022-03-06 06:25:
+            type: number
+            example: 0
+          2022-03-06 06:30:
+            type: number
+            example: 0
+          2022-03-06 06:35:
+            type: number
+            example: 0.25
+          2022-03-06 06:40:
+            type: number
+            example: 0.6
+          2022-03-06 06:45:
+            type: number
+            example: 0.75
+          2022-03-06 06:50:
+            type: number
+            example: 3.2
+          2022-03-06 06:55:
+            type: number
+            example: 4.25
+          2022-03-06 07:00:
+            type: number
+            example: 3.75
+          2022-03-06 07:05:
+            type: number
+            example: 5
+          2022-03-06 07:10:
+            type: number
+            example: 20.25
+          2022-03-06 07:15:
+            type: number
+            example: 6.2
+          2022-03-06 07:20:
+            type: number
+            example: 22.5
+          2022-03-06 07:25:
+            type: number
+            example: 30.5
+          2022-03-06 07:30:
+            type: number
+            example: 19.2
+          2022-03-06 07:35:
+            type: number
+            example: 10.5
+          2022-03-06 07:40:
+            type: number
+            example: 45
+          2022-03-06 07:45:
+            type: number
+            example: 75.25
+          2022-03-06 07:50:
+            type: number
+            example: 109.75
+          2022-03-06 07:55:
+            type: number
+            example: 121.6
+          2022-03-06 08:00:
+            type: number
+            example: 164.25
+          2022-03-06 08:05:
+            type: number
+            example: 181.2
+          2022-03-06 08:10:
+            type: number
+            example: 196.75
+          2022-03-06 08:15:
+            type: number
+            example: 197.25
+          2022-03-06 08:20:
+            type: number
+            example: 211
+          2022-03-06 08:25:
+            type: number
+            example: 203.2
+          2022-03-06 08:30:
+            type: number
+            example: 184.75
+          2022-03-06 08:35:
+            type: number
+            example: 171.8
+          2022-03-06 08:40:
+            type: number
+            example: 164
+          2022-03-06 08:45:
+            type: number
+            example: 148.25
+          2022-03-06 08:50:
+            type: number
+            example: 174.8
+          2022-03-06 08:55:
+            type: number
+            example: 192.5
+          2022-03-06 09:00:
+            type: number
+            example: 218.6
+          2022-03-06 09:05:
+            type: number
+            example: 238
+          2022-03-06 09:10:
+            type: number
+            example: 233.75
+          2022-03-06 09:15:
+            type: number
+            example: 253
+          2022-03-06 09:20:
+            type: number
+            example: 250
+          2022-03-06 09:25:
+            type: number
+            example: 218.2
+          2022-03-06 09:30:
+            type: number
+            example: 217
+          2022-03-06 09:35:
+            type: number
+            example: 239.5
+          2022-03-06 09:40:
+            type: number
+            example: 267.2
+          2022-03-06 09:45:
+            type: number
+            example: 268
+          2022-03-06 09:50:
+            type: number
+            example: 250
+    getDayMonthLineStorage_sacolarResponse:
+      description: Return the storage in kwh in a day window
+      type: object
+      additionalProperties: false
+      properties:
+        1:
+          type: number
+          example: 1.9
+        2:
+          type: number
+          example: 1.5
+        3:
+          type: number
+          example: 1.8
+        4:
+          type: number
+          example: 1.5
+        5:
+          type: number
+          example: 2.2
+        6:
+          type: number
+          example: 0.5
+    getDayYearLineStorage_sacolarResponse:
+      description: Return the storage in kwh in a month window
+      type: object
+      additionalProperties: false
+      properties:
+        1:
+          type: number
+          example: 1.3
+        2:
+          type: number
+          example: 39.3
+        3:
+          type: number
+          example: 9.4
+    getTotalLineStorage_sacolarResponse:
+      description: Return JSON object with year spacing with energy in Kwh
+      type: object
+      additionalProperties: false
+      properties:
+        2021:
+          type: number
+          example: 0
+        2022:
+          type: number
+          example: 1.2
+    getEnergyProdAndConsData_sacolarResponse:
+      description: Chart object contains a 15 minutes intervals object schema with within a 24hours interval
+      type: object
+      additionalProperties: false
+      properties:
+        result:
+          type: number
+          example: 1
+        obj:
+          type: object
+          properties:
+            eChargeTotal:
+              type: string
+              example: 1.2
+            chartData:
+              type: object
+              properties:
+                00:00:
+                  type: object
+                  properties:
+                    pacToUser:
+                      type: number
+                      example: 6
+                    sysOut:
+                      type: number
+                      example: 0
+                    userLoad:
+                      type: number
+                      example: 0
+                    ppv:
+                      type: number
+                      example: 551.2000122070312
+            eDisCharge:
+              type: string
+              example: 0.1
+            eCharge:
+              type: string
+              example: 1.2
+            eAcCharge:
+              type: string
+              example: 0
+            eDisChargeTotal:
+              type: string
+              example: 0.1
+            eAcDisCharge:
+              type: string
+              example: 0
+        msg:
+          type: string
+          example: 200
+    getEnergyOverviewData_sacolarWebForm:
+      type: object
+      additionalProperties: true
+      properties:
+        plantId:
+          description: Plant ID
+          type: integer
+          example: 64782
+        storageSn:
+          description: Storage inverter serial number
+          type: string
+          example: RNK5HGV01D
+      required:
+        - plantId
+    getEnergyOverviewData_sacolarResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        result:
+          type: number
+          example: 1
+        obj:
+          type: object
+          properties:
+            eChargeTotal:
+              type: string
+              example: 51.6
+            useEnergyTotal:
+              type: string
+              example: 0.8
+            eToUserToday:
+              type: string
+              example: 0
+            eDischargeToday:
+              type: string
+              example: 0.1
+            eDischargeTotal:
+              type: string
+              example: 0.7
+            eChargeToday:
+              type: string
+              example: 1.2
+            useEnergyToday:
+              type: string
+              example: 0
+            eToUserTotal:
+              type: string
+              example: 1.2
+            epvTotal:
+              type: string
+              example: 50.4
+            epvToday:
+              type: string
+              example: 1.2
+        msg:
+          type: string
+          example: 200
+    getSystemStatusData_sacolarResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        result:
+          type: number
+          example: 1
+        obj:
+          type: object
+          properties:
+            fAcInput:
+              type: string
+              example: 50
+            status:
+              type: string
+              example: 5
+            statusText:
+              type: string
+              example: PV charge
+            vAcInput:
+              type: string
+              example: 241
+            gridPower:
+              type: string
+              example: 0
+            batPower:
+              type: string
+              example: 0
+            iPv2:
+              type: string
+              example: 0
+            iPv1:
+              type: string
+              example: 0
+            vBat:
+              type: string
+              example: 49.7
+            activePower:
+              type: string
+              example: 0
+            loadPrecent:
+              type: string
+              example: 0
+            iTotal:
+              type: string
+              example: 0
+            deviceType:
+              type: string
+              example: 3
+            panelPower:
+              type: string
+              example: 1
+            apparentPower:
+              type: string
+              example: 0
+            capacity:
+              type: string
+              example: 99
+            vAcOutput:
+              type: string
+              example: 0
+            invStatus:
+              type: string
+              example: -10
+            loadPower:
+              type: string
+              example: 0
+            ppv2:
+              type: string
+              example: 0
+            ppv1:
+              type: string
+              example: 1
+            vPv2:
+              type: string
+              example: 0
+            fAcOutput:
+              type: string
+              example: 0
+            vPv1:
+              type: string
+              example: 356.4
+        msg:
+          type: string
+          example: 200
+    getStorageEnergyData_sacolarResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        result:
+          type: number
+          example: 1
+        obj:
+          type: object
+          properties:
+            socData:
+              type: object
+              properties:
+                7:10:
+                  type: number
+                  example: 32
+                1:35:
+                  type: number
+                  example: 52
+                7:15:
+                  type: number
+                  example: 32
+                6:10:
+                  type: number
+                  example: 36
+                1:30:
+                  type: number
+                  example: 53
+                4:55:
+                  type: number
+                  example: 40
+                6:15:
+                  type: number
+                  example: 35
+                4:50:
+                  type: number
+                  example: 40
+                0:55:
+                  type: number
+                  example: 55
+                2:50:
+                  type: number
+                  example: 48
+                0:50:
+                  type: number
+                  example: 55
+                2:55:
+                  type: number
+                  example: 47
+                6:00:
+                  type: number
+                  example: 36
+                7:20:
+                  type: number
+                  example: 31
+                7:25:
+                  type: number
+                  example: 31
+                1:45:
+                  type: number
+                  example: 52
+                1:40:
+                  type: number
+                  example: 52
+                4:45:
+                  type: number
+                  example: 41
+                4:40:
+                  type: number
+                  example: 41
+                6:05:
+                  type: number
+                  example: 36
+                2:40:
+                  type: number
+                  example: 48
+                0:45:
+                  type: number
+                  example: 55
+                3:50:
+                  type: number
+                  example: 44
+                3:55:
+                  type: number
+                  example: 44
+                0:40:
+                  type: number
+                  example: 56
+                2:45:
+                  type: number
+                  example: 48
+                1:10:
+                  type: number
+                  example: 54
+                8:45:
+                  type: number
+                  example: 40
+                1:15:
+                  type: number
+                  example: 54
+                9:00:
+                  type: number
+                  example: 43
+                9:05:
+                  type: number
+                  example: 44
+                3:40:
+                  type: number
+                  example: 45
+                2:30:
+                  type: number
+                  example: 49
+                2:35:
+                  type: number
+                  example: 49
+                8:50:
+                  type: number
+                  example: 41
+                3:45:
+                  type: number
+                  example: 44
+                1:25:
+                  type: number
+                  example: 53
+                7:00:
+                  type: number
+                  example: 32
+                8:55:
+                  type: number
+                  example: 42
+                5:05:
+                  type: number
+                  example: 40
+                5:00:
+                  type: number
+                  example: 40
+                1:20:
+                  type: number
+                  example: 53
+                7:05:
+                  type: number
+                  example: 32
+                3:30:
+                  type: number
+                  example: 45
+                2:20:
+                  type: number
+                  example: 50
+                2:25:
+                  type: number
+                  example: 49
+                3:35:
+                  type: number
+                  example: 45
+                3:25:
+                  type: number
+                  example: 46
+                4:10:
+                  type: number
+                  example: 43
+                8:30:
+                  type: number
+                  example: 38
+                5:10:
+                  type: number
+                  example: 39
+                0:05:
+                  type: number
+                  example: 58
+                9:30:
+                  type: number
+                  example: 51
+                5:15:
+                  type: number
+                  example: 39
+                7:55:
+                  type: number
+                  example: 32
+                3:20:
+                  type: number
+                  example: 46
+                4:15:
+                  type: number
+                  example: 43
+                0:00:
+                  type: number
+                  example: 58
+                9:25:
+                  type: number
+                  example: 50
+                6:25:
+                  type: number
+                  example: 35
+                2:15:
+                  type: number
+                  example: 50
+                6:20:
+                  type: number
+                  example: 35
+                8:20:
+                  type: number
+                  example: 36
+                2:10:
+                  type: number
+                  example: 50
+                1:00:
+                  type: number
+                  example: 54
+                8:25:
+                  type: number
+                  example: 37
+                1:05:
+                  type: number
+                  example: 54
+                3:15:
+                  type: number
+                  example: 46
+                4:00:
+                  type: number
+                  example: 43
+                5:20:
+                  type: number
+                  example: 39
+                8:40:
+                  type: number
+                  example: 40
+                9:20:
+                  type: number
+                  example: 48
+                5:25:
+                  type: number
+                  example: 38
+                0:15:
+                  type: number
+                  example: 57
+                3:10:
+                  type: number
+                  example: 47
+                0:10:
+                  type: number
+                  example: 58
+                4:05:
+                  type: number
+                  example: 43
+                2:05:
+                  type: number
+                  example: 50
+                6:35:
+                  type: number
+                  example: 34
+                9:15:
+                  type: number
+                  example: 47
+                2:00:
+                  type: number
+                  example: 51
+                9:10:
+                  type: number
+                  example: 46
+                6:30:
+                  type: number
+                  example: 34
+                8:35:
+                  type: number
+                  example: 39
+                3:05:
+                  type: number
+                  example: 47
+                4:30:
+                  type: number
+                  example: 42
+                5:35:
+                  type: number
+                  example: 38
+                5:30:
+                  type: number
+                  example: 38
+                1:50:
+                  type: number
+                  example: 51
+                0:20:
+                  type: number
+                  example: 57
+                7:35:
+                  type: number
+                  example: 31
+                3:00:
+                  type: number
+                  example: 47
+                1:55:
+                  type: number
+                  example: 51
+                4:35:
+                  type: number
+                  example: 41
+                0:25:
+                  type: number
+                  example: 57
+                7:30:
+                  type: number
+                  example: 31
+                9:50:
+                  type: number
+                  example: 56
+                6:50:
+                  type: number
+                  example: 33
+                6:40:
+                  type: number
+                  example: 34
+                9:45:
+                  type: number
+                  example: 55
+                7:40:
+                  type: number
+                  example: 31
+                6:45:
+                  type: number
+                  example: 33
+                8:05:
+                  type: number
+                  example: 33
+                8:00:
+                  type: number
+                  example: 32
+                5:55:
+                  type: number
+                  example: 36
+                5:45:
+                  type: number
+                  example: 37
+                0:30:
+                  type: number
+                  example: 56
+                4:20:
+                  type: number
+                  example: 42
+                5:40:
+                  type: number
+                  example: 37
+                5:50:
+                  type: number
+                  example: 37
+                4:25:
+                  type: number
+                  example: 42
+                7:45:
+                  type: number
+                  example: 31
+                9:40:
+                  type: number
+                  example: 53
+                0:35:
+                  type: number
+                  example: 56
+                9:35:
+                  type: number
+                  example: 52
+                7:50:
+                  type: number
+                  example: 31
+                6:55:
+                  type: number
+                  example: 33
+                8:15:
+                  type: number
+                  example: 35
+                8:10:
+                  type: number
+                  example: 34
+            mergeRevenue:
+              type: string
+              example: 0
+            cdsData:
+              type: object
+              properties:
+                0:
+                  type: object
+                  properties:
+                    disCharge:
+                      type: number
+                      example: 5.6
+                    charge:
+                      type: number
+                      example: 0.4
+                1:
+                  type: object
+                  properties:
+                    disCharge:
+                      type: number
+                      example: 9.9
+                    charge:
+                      type: number
+                      example: 4.3
+                2:
+                  type: object
+                  properties:
+                    disCharge:
+                      type: number
+                      example: 9.9
+                    charge:
+                      type: number
+                      example: 5
+                3:
+                  type: object
+                  properties:
+                    disCharge:
+                      type: number
+                      example: 10
+                    charge:
+                      type: number
+                      example: 4.7
+                4:
+                  type: object
+                  properties:
+                    disCharge:
+                      type: number
+                      example: 10.1
+                    charge:
+                      type: number
+                      example: 4.9
+                5:
+                  type: object
+                  properties:
+                    disCharge:
+                      type: number
+                      example: 6.4
+                    charge:
+                      type: number
+                      example: 3
+                6:
+                  type: object
+                  properties:
+                    disCharge:
+                      type: number
+                      example: 11.799999999999999
+                    charge:
+                      type: number
+                      example: 2.9
+                date:
+                  type: string
+                  format: date
+                  example: 2022-03-06
+            moneyUnit:
+              type: string
+              example: 0
+            useRevenue:
+              type: string
+              example: 0
+        msg:
+          type: string
+          example: 200
+    getallDeviceListResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        plantMoneyText:
+          type: string
+          example: 0.00/$
+        optimizerType:
+          type: number
+          example: 0
+        ammeterType:
+          type: string
+          example: 0
+        storagePgrid:
+          type: string
+          example: 0
+        todayEnergy:
+          type: string
+          example: 4.7
+        storageTodayPpv:
+          type: string
+          example: 584
+        invTodayPpv:
+          type: string
+          example: 0
+        totalEnergy:
+          type: string
+          example: 164.6
+        nominalPower:
+          type: number
+          example: 0
+        todayDischarge:
+          type: string
+          example: 0
+        Co2Reduction:
+          type: string
+          example: 0
+        isHaveOptimizer:
+          type: number
+          example: 0
+        storagePuser:
+          type: string
+          example: 584
+        useEnergy:
+          type: string
+          example: 0
+        totalMoneyText:
+          type: string
+          example: 0
+        nominal_Power:
+          type: number
+          example: 5600
+        deviceList:
+          type: array
+          items:
+            type: object
+            properties:
+              lost:
+                type: boolean
+              location:
+                type: string
+                example:
+              datalogSn:
+                type: string
+                example: DDD0BHP04P
+              deviceSn:
+                type: string
+                example: RKG5BEL098
+              deviceStatus:
+                type: string
+                example: 5
+              pCharge:
+                type: string
+                example: 0
+              activePower:
+                type: string
+                example: 0
+              deviceAilas:
+                type: string
+                example: RKG5BEL098
+              deviceType:
+                type: string
+                example: storage
+              storageType:
+                type: string
+                example: 3
+              eChargeToday:
+                type: string
+                example: 0
+              apparentPower:
+                type: string
+                example: 5000
+              capacity:
+                type: string
+                example: 99 %
+              energy:
+                type: string
+                example: 50.4
+        isHavePumper:
+          type: string
+          example: 0
+    getUserCentralEntryDataByPlantIdResponse:
+      type: object
+      additionalProperties: false
+      properties:
+        weatherMap:
+          type: object
+          properties:
+            msg:
+              type: string
+              example:
+            success:
+              type: boolean
+        plantNumber:
+          type: number
+          example: 1
+        treeValue:
+          type: string
+          example: 9.1
+        treeStr:
+          type: string
+          example: 9
+        nominalPowerStr:
+          type: string
+          example: 5.6kWp
+        eventMessBeanList:
+          type: array
+          items: {}
+        yearValue:
+          type: string
+          example: 0.0
+        formulaCo2Vlue:
+          type: string
+          example: 164.1
+        formulaCo2Str:
+          type: string
+          example: 164.1kg
+        todayValue:
+          type: string
+          example: 4.7
+        optimezerMap:
+          type: object
+          properties:
+            isHaveOptimezer:
+              type: number
+              example: 0
+        totalStr:
+          type: string
+          example: 164.6kWh
+        powerValue:
+          type: string
+          example: 584.0
+        totalValue:
+          type: string
+          example: 164.6
+        nominalPowerValue:
+          type: string
+          example: 5600.0
+        powerValueStr:
+          type: string
+          example: 0.6kW
+        monthValue:
+          type: string
+          example: 9.9
+        plantBean:
+          type: object
+          properties:
+            id:
+              type: number
+              example: 726415
+            plantName:
+              type: string
+              example: ProGeek PV
+            userBean:
+              type: string
+              format: nullable
+            userAccount:
+              type: string
+              example: ProGeek
+            pairViewUserAccount:
+              type: string
+              format: nullable
+            parentID:
+              type: string
+              format: nullable
+            createDate:
+              type: number
+              example: 1630598400000
+            nominalPower:
+              type: number
+              example: 5600
+            designCompany:
+              type: string
+              example: 0
+            country:
+              type: string
+              example: plant country
+            city:
+              type: string
+              example: plant city location
+            timezone:
+              type: number
+              example: 2
+            plant_lat:
+              type: string
+              example: 11.11
+            plant_lng:
+              type: string
+              example: 23.23
+            latitude_d:
+              type: string
+              format: nullable
+            latitude_f:
+              type: string
+              format: nullable
+            latitude_m:
+              type: string
+              format: nullable
+            longitude_d:
+              type: string
+              format: nullable
+            longitude_f:
+              type: string
+              format: nullable
+            longitude_m:
+              type: string
+              format: nullable
+            formulaMoney:
+              type: number
+              example: 0
+            formulaMoneyUnitId:
+              type: string
+              example: dollar
+            fixedPowerPrice:
+              type: number
+              example: 0
+            peakPeriodPrice:
+              type: number
+              example: 0
+            flatPeriodPrice:
+              type: number
+              example: 0
+            valleyPeriodPrice:
+              type: number
+              example: 0
+            formulaCoal:
+              type: number
+              example: 0
+            formulaCo2:
+              type: number
+              example: 0
+            formulaSo2:
+              type: number
+              example: 0
+            formulaTree:
+              type: number
+              example: 0
+            plantImgName:
+              type: string
+              example: 726415_1images1645288119.jpg
+            locationImgName:
+              type: string
+              format: nullable
+            logoImgName:
+              type: string
+              example:
+            plantType:
+              type: number
+              example: 0
+            phoneNum:
+              type: string
+              format: nullable
+            remark:
+              type: string
+              format: nullable
+            companyName:
+              type: string
+              example:
+            defaultPlant:
+              type: boolean
+            isShare:
+              type: boolean
+            plantAddress:
+              type: string
+              example: str. example
+            mapCity:
+              type: string
+              format: nullable
+            mapLat:
+              type: string
+              format: nullable
+            mapLng:
+              type: string
+              format: nullable
+            eToday:
+              type: number
+              example: 0
+            eTotal:
+              type: number
+              example: 164.6
+            energyMonth:
+              type: number
+              example: 0
+            energyYear:
+              type: number
+              example: 0
+            irradiance:
+              type: number
+              example: 0
+            envTemp:
+              type: number
+              example: 0
+            panelTemp:
+              type: number
+              example: 0
+            windSpeed:
+              type: number
+              example: 0
+            windAngle:
+              type: number
+              example: 0
+            storage_TodayToUser:
+              type: number
+              example: 0
+            storage_TotalToUser:
+              type: number
+              example: 0
+            storage_TodayToGrid:
+              type: number
+              example: 0
+            storage_TotalToGrid:
+              type: number
+              example: 0
+            storage_eChargeToday:
+              type: number
+              example: 0
+            storage_eDisChargeToday:
+              type: number
+              example: 0
+            storage_BattoryPercentage:
+              type: number
+              example: 0
+            hasDeviceOnLine:
+              type: number
+              example: 0
+            hasStorage:
+              type: number
+              example: 0
+            createDateText:
+              type: string
+              format: date
+              example: 2021-09-03
+            dataLogList:
+              type: string
+              format: nullable
+            currentPac:
+              type: number
+              example: 0
+            onLineEnvCount:
+              type: number
+              example: 0
+            etodayMoney:
+              type: number
+              example: 0
+            etotalMoney:
+              type: number
+              example: 0
+            deviceCount:
+              type: number
+              example: 0
+            alarmValue:
+              type: number
+              example: 0
+            eventMessBeanList:
+              type: string
+              format: nullable
+            formulaMoneyStr:
+              type: string
+              format: nullable
+            unitMap:
+              type: string
+              format: nullable
+            alias:
+              type: string
+              format: nullable
+            status:
+              type: number
+              example: 0
+            paramBean:
+              type: string
+              format: nullable
+            currentPacStr:
+              type: string
+              format: nullable
+            nominalPowerStr:
+              type: string
+              example: 5.6kWp
+            map_countryId:
+              type: number
+              example: 0
+            map_provinceId:
+              type: number
+              example: 0
+            map_areaId:
+              type: number
+              example: 0
+            map_cityId:
+              type: number
+              example: 0
+            prToday:
+              type: string
+              format: nullable
+            prMonth:
+              type: string
+              format: nullable
+            level:
+              type: number
+              example: 1
+            emonthCo2Text:
+              type: string
+              example: 0
+            children:
+              type: string
+              format: nullable
+            timezoneText:
+              type: string
+              example: GMT+2
+            longitudeText:
+              type: string
+              example: null°null′null″
+            latitudeText:
+              type: string
+              example: null°null′null″
+            createDateTextA:
+              type: string
+              format: nullable
+            plantFromBean:
+              type: string
+              format: nullable
+            treeName:
+              type: string
+              example: ProGeek PV
+            treeID:
+              type: string
+              example: PLANT_726415
+            imgPath:
+              type: string
+              example: css/img/plant.gif
+            moneyUnitText:
+              type: string
+              example: $
+            etodayMoneyText:
+              type: string
+              example: 0
+            etodayCoalText:
+              type: string
+              example: 0
+            etodayCo2Text:
+              type: string
+              example: 0
+            etodaySo2Text:
+              type: string
+              example: 0
+            emonthMoneyText:
+              type: string
+              example: 0
+            eyearMoneyText:
+              type: string
+              example: 0
+            emonthCoalText:
+              type: string
+              example: 0
+            emonthSo2Text:
+              type: string
+              example: 0
+            etotalMoneyText:
+              type: string
+              example: 0
+            etotalSo2Text:
+              type: string
+              example: 4.9
+            currentPacTxt:
+              type: string
+              example: 0
+            etotalCo2Text:
+              type: string
+              example: 164.1
+            etotalCoalText:
+              type: string
+              example: 65.8
+            etotalFormulaTreeText:
+              type: string
+              example: 9.1
+        todayStr:
+          type: string
+          example: 4.7kWh
+        monthStr:
+          type: string
+          example: 9.9kWh
+        formulaCoalStr:
+          type: string
+          example: 65.8kg
+        alarmValue:
+          type: number
+          example: 0
+        yearStr:
+          type: string
+          example: 0kWh
+        isHaveTigo:
+          type: number
+          example: 0
+        formulaCoalValue:
+          type: string
+          example: 65.8
+    getUserCentralEntryDataByPlantIdWebForm:
+      type: object
+      additionalProperties: true
+      properties:
+        language:
+          description: Select the lannguage, default english
+          type: string
+          default: 1
+        plantId:
+          description: Plant Id from Growatt OSS
+          type: integer
+          default: 13242
+      required:
+        - language
+        - plantId
+    LoginResponse:
+      type: object
+      properties:
+        back:
+          type: object
+          properties:
+            deviceCount:
+              type: string
+              example: 2
+            data:
+              type: array
+              items:
+                type: object
+                properties:
+                  plantName:
+                    type: string
+                    example: <OSS Name of the plant>
+                  plantId:
+                    type: string
+                    example: <OSS PLANT ID>
+            isOpenSmartFamily:
+              type: number
+              example: 0
+            isCheckUserAuth:
+              type: boolean
+            msg:
+              type: string
+              example:
+            isEicUserAddSmartDevice:
+              type: boolean
+            isOpenDeviceList:
+              type: number
+              example: 1
+            isOpenDeviceParams:
+              type: number
+              example: 0
+            quality:
+              type: string
+              example: 0
+            service:
+              type: string
+              example: 1
+            totalData:
+              type: object
+              properties: {}
+            user:
+              type: object
+              properties:
+                uid:
+                  type: string
+                  example:
+                userLanguage:
+                  type: string
+                  example: en
+                inverterGroup:
+                  type: array
+                  items: {}
+                timeZone:
+                  type: number
+                  example: 2
+                lng:
+                  type: string
+                  example:
+                dataAcqList:
+                  type: array
+                  items: {}
+                type:
+                  type: number
+                  example: 0
+                password:
+                  type: string
+                  example: <OSS Account hash password>
+                kind:
+                  type: number
+                  example: 0
+                isValiPhone:
+                  type: number
+                  example: 0
+                mailNotice:
+                  type: boolean
+                id:
+                  type: number
+                  example: 962874
+                lastLoginIp:
+                  type: string
+                  format: ipv4
+                  example: 100.120.96.55
+                userDeviceType:
+                  type: number
+                  example: -1
+                registerType:
+                  type: string
+                  example: 0
+                phoneNum:
+                  type: string
+                  example: <OSS Phone Number>
+                approved:
+                  type: boolean
+                area:
+                  type: string
+                  example: Europe
+                smsNotice:
+                  type: boolean
+                isAgent:
+                  type: number
+                  example: 0
+                token:
+                  type: string
+                  example: <OSS TOKEN>
+                nickName:
+                  type: string
+                  example:
+                parentUserId:
+                  type: number
+                  example: 0
+                customerCode:
+                  type: string
+                  example:
+                counrty:
+                  type: string
+                  example: plant Country
+                isPhoneNumReg:
+                  type: number
+                  example: 0
+                createDate:
+                  type: string
+                  format: date-time
+                  example: 2021-09-04 00:00:06
+                rightlevel:
+                  type: number
+                  example: 1
+                appType:
+                  type: string
+                  example:
+                serverUrl:
+                  type: string
+                  example:
+                lat:
+                  type: string
+                  example:
+                lastLoginTime:
+                  type: string
+                  format: date-time
+                  example: 2022-03-02 20:47:51
+                roleId:
+                  type: number
+                  example: 0
+                enabled:
+                  type: boolean
+                agentCode:
+                  type: string
+                  example: BBFG7
+                inverterList:
+                  type: array
+                  items: {}
+                isValiEmail:
+                  type: number
+                  example: 0
+                accountName:
+                  type: string
+                  example: <OSS Account Name>
+                accountNameOss:
+                  type: string
+                  example: ProGeek
+                email:
+                  type: string
+                  format: email
+                  example: <OSS email address>
+                company:
+                  type: string
+                  example: <OSS Account Company Name>
+                activeName:
+                  type: string
+                  example:
+                codeIndex:
+                  type: number
+                  example: 1
+                appAlias:
+                  type: string
+                  example: <OSS Account alias name>
+                isBigCustomer:
+                  type: number
+                  example: 0
+                noticeType:
+                  type: string
+                  example:
+            success:
+              type: boolean
+            app_code:
+              type: string
+              example: 1
+            isViewDeviceInfo:
+              type: boolean
+    LoginWebForm:
+      type: object
+      additionalProperties: false
+      properties:
+        userName:
+          type: string
+          format: string
+          example: growatt_oss_username
+          pattern: ^[A-Za-z0-9]{3,30}$
+          maxLength: 30
+        password:
+          type: string
+          format: string
+          example: growatt_oss_password
+          description: Tha password must be encoded and not in plain text
+          maxLength: 32
+      required:
+        - userName
+        - password
+tags:
+  - name: Login
+    description: Login procedure and something more
+  - name: PlantDetails
+    description: Get the specific plan details
+  - name: StorageAPI
+    description: Get the storage infomation
+security:
+  - ApiKeyAuth: []

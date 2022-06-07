@@ -30,8 +30,12 @@ class GrowattWeb(GrowattApi):
         super(GrowattWeb, self).__init__()
         self.logged_in = False
 
-        self.username = kwargs.get('username', getattr(settings, 'GROWATT_USERNAME', None))
-        self.password = kwargs.get('password', getattr(settings, 'GROWATT_PASSWORD', None))
+        self.username = kwargs.get(
+            'username', getattr(settings, 'GROWATT_USERNAME', None)
+        )
+        self.password = kwargs.get(
+            'password', getattr(settings, 'GROWATT_PASSWORD', None)
+        )
 
         if any(x is None for x in [self.username, self.password]):
             raise ImproperlyConfigured(

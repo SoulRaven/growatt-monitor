@@ -50,9 +50,7 @@ def get_credits():
     """
     jinja_env = SandboxedEnvironment(undefined=StrictUndefined)
     commit = "2acaf956ce02f439f938862f2457fad2fb50d9da"
-    template_url = (
-        f"https://raw.githubusercontent.com/soulraven/jinja-templates/{commit}/credits.md"
-    )
+    template_url = f"https://raw.githubusercontent.com/soulraven/jinja-templates/{commit}/credits.md"
     template_data = get_credits_data()
     template_text = urlopen(template_url).read().decode("utf8")  # noqa: S310
     return jinja_env.from_string(template_text).render(**template_data)

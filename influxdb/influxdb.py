@@ -40,7 +40,9 @@ class BatchingCallback:
         :param exception:
         :return:
         """
-        print(f"Retryable error occurs for batch: {conf}, data: {data} retry: {exception}")
+        print(
+            f"Retryable error occurs for batch: {conf}, data: {data} retry: {exception}"
+        )
 
 
 class InfluxDB:
@@ -63,7 +65,9 @@ class InfluxDB:
             'redirect': app_settings.INFLUXDB_REDIRECT,
         }
 
-        self.connection = self._connection(url=url, token=token, org=org, **options, **kwargs)
+        self.connection = self._connection(
+            url=url, token=token, org=org, **options, **kwargs
+        )
 
         if self.is_alive:
             self._write_api = self.connection.write_api(
@@ -80,7 +84,9 @@ class InfluxDB:
             self.connection.close()
             logger.debug('InfluxDB connection is closed!')
 
-    def _connection(self, url, token, org, gzip, timeout, connect, read, redirect, **kwargs):
+    def _connection(
+        self, url, token, org, gzip, timeout, connect, read, redirect, **kwargs
+    ):
         """Create an InfluxDB connection and test to make sure it works.
         We test with the get all users command.  If the address is bad it fails
         with a 404.  If the user doesn't have permission it fails with 401
@@ -110,7 +116,9 @@ class InfluxDB:
 
         if data_points is not None and len(data_points) > 0:
             if self.is_alive:
-                self._write_api.write(bucket=app_settings.INFLUXDB_BUCKET, record=data_points)
+                self._write_api.write(
+                    bucket=app_settings.INFLUXDB_BUCKET, record=data_points
+                )
                 logger.info('Data upload on InfluxDB bucket')
 
     @property
@@ -160,7 +168,12 @@ class InfluxDB:
         # convert datetime object to string
         time = self._create_influx_time(time)
 
-        point = {'tags': tags, 'time': time, 'fields': fields, 'measurement': measurement}
+        point = {
+            'tags': tags,
+            'time': time,
+            'fields': fields,
+            'measurement': measurement,
+        }
 
         return point
 

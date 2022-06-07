@@ -23,10 +23,16 @@ class Runtime:
         import signals  # noqa
 
         # Growatt CLI args
-        self.growatt_username = kwargs.get('username', getattr(settings, 'GROWATT_USERNAME', ""))
-        self.growatt_password = kwargs.get('password', getattr(settings, 'GROWATT_PASSWORD', ""))
+        self.growatt_username = kwargs.get(
+            'username', getattr(settings, 'GROWATT_USERNAME', "")
+        )
+        self.growatt_password = kwargs.get(
+            'password', getattr(settings, 'GROWATT_PASSWORD', "")
+        )
 
-        self.pvoutput_key = kwargs.get('pv_output_key', getattr(settings, 'PV_OUTPUT_KEY', ""))
+        self.pvoutput_key = kwargs.get(
+            'pv_output_key', getattr(settings, 'PV_OUTPUT_KEY', "")
+        )
         self.pvoutput_system_id = kwargs.get(
             'pv_output_system_id', getattr(settings, 'PV_OUTPUT_SYSTEM_ID', 0)
         )
@@ -41,9 +47,15 @@ class Runtime:
         if owm_key:
             self.owm = False
 
-        self.influxdb_url = kwargs.get('influxdb_url') or getattr(settings, 'INFLUXDB_URL')
-        self.influxdb_token = kwargs.get('influxdb_token') or getattr(settings, 'INFLUXDB_TOKEN')
-        self.influxdb_org = kwargs.get('influxdb_org') or getattr(settings, 'INFLUXDB_ORG')
+        self.influxdb_url = kwargs.get('influxdb_url') or getattr(
+            settings, 'INFLUXDB_URL'
+        )
+        self.influxdb_token = kwargs.get('influxdb_token') or getattr(
+            settings, 'INFLUXDB_TOKEN'
+        )
+        self.influxdb_org = kwargs.get('influxdb_org') or getattr(
+            settings, 'INFLUXDB_ORG'
+        )
 
     def run_schedule_task(self):
         log.info("Run schedule task")
@@ -58,7 +70,9 @@ class Runtime:
                 self.owm.fresh = False
 
         pv_data = {}
-        with GrowattWeb(username=self.growatt_username, password=self.growatt_password) as api:
+        with GrowattWeb(
+            username=self.growatt_username, password=self.growatt_password
+        ) as api:
             data = api.login()
             if 'success' in data and data['success']:
                 # TODO: Get only the first plant from a bigger list.
@@ -88,7 +102,9 @@ class Runtime:
         }
         async with aiohttp.ClientSession() as session:
             pvo = PVOutput(
-                apikey=self.pvoutput_key, systemid=self.pvoutput_system_id, session=session
+                apikey=self.pvoutput_key,
+                systemid=self.pvoutput_system_id,
+                session=session,
             )
             await pvo.addstatus(data)
 

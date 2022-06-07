@@ -49,7 +49,9 @@ class GrowattInfluxDB(InfluxDB):
             tags = {'plant_name': total.plant_name, 'plant_id': total.plant_id}
             fields = self.build_fields(total.totals)
 
-            point = self.create_point(measurement='GrowattPV', tags=tags, fields=fields, time=time)
+            point = self.create_point(
+                measurement='GrowattPV', tags=tags, fields=fields, time=time
+            )
 
             data_buffer.append(point)
 
@@ -63,7 +65,9 @@ class GrowattInfluxDB(InfluxDB):
             }
             fields = self.build_fields(device.sensors)
 
-            point = self.create_point(measurement='GrowattPV', tags=tags, fields=fields, time=time)
+            point = self.create_point(
+                measurement='GrowattPV', tags=tags, fields=fields, time=time
+            )
 
             data_buffer.append(point)
 

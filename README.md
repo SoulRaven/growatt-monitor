@@ -9,8 +9,10 @@ Growatt inverter monitor from Modbus and API server
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/growatt-monitor?style=plastic)](https://pypi.org/project/growatt-monitor/)
 [![License](https://img.shields.io/github/license/soulraven/growatt-monitor?style=plastic)](https://img.shields.io/github/license/soulraven/growatt-monitor)
 
+***
 
 ### 🔧 Installation
+
 ### Growatt monitor module
 Download the repository and use [pip](https://pip.pypa.io/en/stable/) to install Growatt Monitor:
 ```bash
@@ -23,14 +25,7 @@ To install for all users on the system, run pip as root:
 sudo pip install -r requirements.txt .
 ```
 
-### Documentation
-
-The documentation is download from [http://growatt.pl](http://growatt.pl) website, more exactly from [https://growatt.pl/wp-content/uploads/2020/01/Growatt-Server-API-Guide.pdf](https://growatt.pl/wp-content/uploads/2020/01/Growatt-Server-API-Guide.pdf)
-
-Another documentation is provided by the Growatt email support: [https://www.showdoc.com.cn/262556420217021/](https://www.showdoc.com.cn/262556420217021/) and the password is: **123456**
-
-- Swagger definition object generator: https://roger13.github.io/SwagDefGen/
-
+***
 
 ### Variables
 
@@ -38,21 +33,30 @@ Some variables you may want to set.
 
 `api.server_url` The growatt server URL, default: 'https://server.growatt.com/'
 
-### 📚 Library used
-This package uses:
-
-- [https://github.com/indykoning/PyPi_GrowattServer](https://github.com/indykoning/PyPi_GrowattServer)
+***
 
 ### 🌍 Contributions
 
 Contributions of all forms are welcome :)
 
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
+***
+
 ## 🗒 License
 
-This repository is licensed under the GNU General Public License, version 3 (GPLv3).
+This project is licensed under [GPLv3].
+
+***
 
 ## 👀 Author
 
-Zaharia Constantin
+Zaharia Constantin, my [GitHub profile] and [GitHub Page]
 
-[View my GitHub profile 💡](https://github.com/soulraven)
+***
+
+[GitHub profile]: https://github.com/soulraven/
+[Github Page]: https://soulraven.github.io/
+[GPLv3]: https://soulraven.github.io/growatt_monitor/license

@@ -81,7 +81,10 @@ class Proxy:
             logger.error("IP and port information not available")
 
         self.server.listen(200)
-        self.forward_to = (app_settings.GROWATT_REMOTE_IP, app_settings.GROWATT_REMOTE_PORT)
+        self.forward_to = (
+            app_settings.GROWATT_REMOTE_IP,
+            app_settings.GROWATT_REMOTE_PORT,
+        )
 
     def main(self):
         self.input_list.append(self.server)
@@ -175,7 +178,9 @@ class Proxy:
                                 conf_cmd = "Time"
                             if conf_cmd == "0011":
                                 conf_cmd = "Change IP"
-                            logger.info("Configure command not blocked : {}".format(conf_cmd))
+                            logger.info(
+                                "Configure command not blocked : {}".format(conf_cmd)
+                            )
                     else:
                         # All configure inverter commands will be blocked
                         logger.info("Inverter Configure command detected")

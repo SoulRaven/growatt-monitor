@@ -78,7 +78,9 @@ def growatt_runtime(options) -> None:
 
     username = options.get('username') or getattr(app_settings, 'GROWATT_USERNAME')
     password = options.get('password') or getattr(app_settings, 'GROWATT_PASSWORD')
-    plant_id = options.get('plantId') or getattr(app_settings, 'GROWATT_DEFAULT_PLANT_ID')
+    plant_id = options.get('plantId') or getattr(
+        app_settings, 'GROWATT_DEFAULT_PLANT_ID'
+    )
 
     url = options.get('server') or getattr(app_settings, 'GROWATT_DEFAULT_URL')
 
@@ -105,7 +107,9 @@ def growatt_runtime(options) -> None:
 
     # Add sensors for each device in the specified plant.
     for device in devices:
-        probe = GrowattData(api, username, password, device["deviceSn"], device["deviceType"])
+        probe = GrowattData(
+            api, username, password, device["deviceSn"], device["deviceType"]
+        )
 
         sensor_descriptions: tuple[GrowattSensorEntityDescription, ...] = ()
 
@@ -123,7 +127,8 @@ def growatt_runtime(options) -> None:
                 sensor_descriptions = MIX_SENSOR_TYPES
             case _:
                 logger.debug(
-                    "Device type %s was found but is not supported right now", device["deviceType"]
+                    "Device type %s was found but is not supported right now",
+                    device["deviceType"],
                 )
 
         if not probe.data:
@@ -132,7 +137,8 @@ def growatt_runtime(options) -> None:
 
         devices = GrowattAppliance(
             InverterInfo(
-                device=device, plant_info=PlantInfo(plantName=plant_name, plantId=plant_id)
+                device=device,
+                plant_info=PlantInfo(plantName=plant_name, plantId=plant_id),
             )
         )
 
@@ -159,7 +165,9 @@ class InverterInfo:
 
 
 class GrowattSensor:
-    def __init__(self, value, description: GrowattSensorEntityDescription, extra_options=None):
+    def __init__(
+        self, value, description: GrowattSensorEntityDescription, extra_options=None
+    ):
         """
 
         :param value:
@@ -378,7 +386,9 @@ class GrowattData:
                 case "mix":
                     mix_info = self.api.mix_info(self.device_id)
                     mix_totals = self.api.mix_totals(self.device_id, self.plant_id)
-                    mix_system_status = self.api.mix_system_status(self.device_id, self.plant_id)
+                    mix_system_status = self.api.mix_system_status(
+                        self.device_id, self.plant_id
+                    )
 
                     mix_detail = self.api.mix_detail(self.device_id, self.plant_id)
                     # Get the chart data and work out the time of the last entry, use this as the last time data was
@@ -401,7 +411,9 @@ class GrowattData:
                     dashboard_values_for_mix = {
                         # etouser is already used by the results from 'mix_detail' so we rebrand it as
                         # 'etouser_combined'
-                        "etouser_combined": float(dashboard_data["etouser"].replace("kWh", ""))
+                        "etouser_combined": float(
+                            dashboard_data["etouser"].replace("kWh", "")
+                        )
                     }
                     self.data = {
                         **mix_info,
