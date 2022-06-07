@@ -4,4 +4,7 @@ mkdocs-material>=8.2.9
 mkdocs-gen-files>=0.3.4
 mkdocs-literate-nav>=0.4.1
 mkdocs-coverage>=0.2.5
+mkdocs-autolinks-plugin>=0.5.0
+mkdocs-awesome-pages-plugin>=2.7.0
+git+https://github.com/Andre601/mkdocs-pagenav-generator
 coverage>=6.3.2
