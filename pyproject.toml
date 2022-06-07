@@ -87,7 +87,7 @@ roundbox-admin = "RoundBox.core.cliparser:exec_from_cli"
 "Issues" = "https://github.com/soulraven/growatt-monitor/issues"
 "Discussions" = "https://github.com/soulraven/growatt-monitor/discussions"
 "Documentation" = "https://soulraven.github.io/growatt-monitor/"
-"Changelog" = "https://github.com/soulraven/growat_monitor/blob/master/CHANGELOG.md"
+"Releases" = "https://soulraven.github.io/growatt-monitor/releases"
 
 [tool.black]
 line_length = 88
