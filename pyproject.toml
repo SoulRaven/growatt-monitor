@@ -3,7 +3,7 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-name = "Growatt Monitor"
+name = "growatt_monitor"
 version = "1.0.0"
 description = "Growatt inverter monitor from Modbus and API server and parse data to different output sources"
 authors = ["Zaharia Constantin <layout.webdesign@gmail.com>"]
